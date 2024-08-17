@@ -3,8 +3,8 @@ package br.com.luccasoftware.api_dw.jpa;
 public class Candidato {
 
     private String prefixo;
-    private Long idCandidato;
-    private Long idCargo;
+    private Long numero;
+    private Long id_cargo;
     private String nome;
     private String sexo;
     private String nascimento;  // Usando String para a data
@@ -14,24 +14,26 @@ public class Candidato {
     private String status;
     private String tipoDef;
     private Boolean afro;
-    private Boolean solicitouInscricaoNegro;
+    private Boolean pcd;
+    private String cpf;
+    private String inscricao;
 
     // Getters and Setters
 
-    public Long getIdCandidato() {
-        return idCandidato;
+    public Long getNumero() {
+        return numero;
     }
 
-    public void setIdCandidato(Long idCandidato) {
-        this.idCandidato = idCandidato;
+    public void setNumero(Long numero) {
+        this.numero = numero;
     }
 
-    public Long getIdCargo() {
-        return idCargo;
+    public Long getId_cargo() {
+        return id_cargo;
     }
 
-    public void setIdCargo(Long idCargo) {
-        this.idCargo = idCargo;
+    public void setId_cargo(Long id_cargo) {
+        this.id_cargo = id_cargo;
     }
 
     public String getNome() {
@@ -107,12 +109,12 @@ public class Candidato {
         this.afro = afro;
     }
 
-    public Boolean getSolicitouInscricaoNegro() {
-        return solicitouInscricaoNegro;
+    public Boolean getPcd() {
+        return pcd;
     }
 
-    public void setSolicitouInscricaoNegro(Boolean solicitouInscricaoNegro) {
-        this.solicitouInscricaoNegro = solicitouInscricaoNegro;
+    public void setPcd(Boolean pcd) {
+        this.pcd = pcd;
     }
 
     public String getPrefixo() {
@@ -121,5 +123,21 @@ public class Candidato {
 
     public void setPrefixo(String prefixo) {
         this.prefixo = prefixo;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public String getInscricao() {
+        return inscricao;
+    }
+
+    public void setInscricao(String inscricao) {
+        this.inscricao = inscricao;
     }
 }

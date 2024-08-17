@@ -23,12 +23,20 @@ public class CandidatoRepository {
         List<Candidato> candidatos = new ArrayList<>();
 
         String sql = "SELECT a.numero as id_candidato, a.cargo as id_cargo, a.nome, a.sexo, a.nascimento, a.cep, a.cidade, a.estado, a.status, " +
-                "a.tipo_def, a.afro, a.solicitou_inscricao_negro " +
+                "a.tipo_def, a.afro, case when a.tipo_def !='NENHUMA' and a.enviou_laudo then 'sim' else 'nao' end as pcd, a.cpf,\n" +
+                "       CASE " +
+                "           WHEN a.inscricao IS NOT NULL THEN lpad(a.cargo::text, 3, '0'::text) || lpad(a.inscricao::text, 7, '0'::text)\n" +
+                "           ELSE lpad(a.cargo::text, 3, '0'::text) || lpad(a.numero::text, 7, '0'::text)\n" +
+                "           END as inscricao " +
                 "FROM " + prefixo + "_candidato a ORDER BY a.numero";
 
-        if (!databaseUtils.existeColuna(prefixo + "_candidato", "solicitou_inscricao_negro")) {
+        if (!databaseUtils.existeColuna(prefixo + "_candidato", "afro")) {
             sql = "SELECT a.numero as id_candidato, a.cargo as id_cargo, a.nome, a.sexo, a.nascimento, a.cep, a.cidade, a.estado, a.status, " +
-                    "a.tipo_def, false, false " +
+                    "a.tipo_def, false, case when a.tipo_def !='NENHUMA' and a.enviou_laudo then 'sim' else 'nao' end as pcd, a.cpf,\n" +
+                    "       CASE" +
+                    "           WHEN a.inscricao IS NOT NULL THEN lpad(a.cargo::text, 3, '0'::text) || lpad(a.inscricao::text, 7, '0'::text)\n" +
+                    "           ELSE lpad(a.cargo::text, 3, '0'::text) || lpad(a.numero::text, 7, '0'::text)\n" +
+                    "           END as inscricao " +
                     "FROM " + prefixo + "_candidato a ORDER BY a.numero";
         }
 
@@ -38,8 +46,8 @@ public class CandidatoRepository {
         for (Object[] row : resultList) {
             Candidato candidato = new Candidato();
             candidato.setPrefixo(prefixo);
-            candidato.setIdCandidato(row[0] != null ? Long.parseLong(row[0].toString()) : 0L);
-            candidato.setIdCargo(row[1] != null ? Long.parseLong(row[1].toString()) : 0L);
+            candidato.setNumero(row[0] != null ? Long.parseLong(row[0].toString()) : 0L);
+            candidato.setId_cargo(row[1] != null ? Long.parseLong(row[1].toString()) : 0L);
             candidato.setNome(row[2] != null ? row[2].toString() : "");
             candidato.setSexo(row[3] != null ? row[3].toString() : "");
             candidato.setNascimento(row[4] != null ? row[4].toString() : "");
@@ -49,7 +57,9 @@ public class CandidatoRepository {
             candidato.setStatus(row[8] != null ? row[8].toString() : "");
             candidato.setTipoDef(row[9] != null ? row[9].toString() : "unknown");
             candidato.setAfro(row[10] != null ? Boolean.parseBoolean(row[10].toString()) : false);
-            candidato.setSolicitouInscricaoNegro(row[11] != null ? Boolean.parseBoolean(row[11].toString()) : false);
+            candidato.setPcd(row[11] != null ? Boolean.parseBoolean(row[11].toString()) : false);
+            candidato.setCpf(row[12] != null ? row[12].toString() : "");
+            candidato.setInscricao(row[13] != null ? row[13].toString() : "");
             candidatos.add(candidato);
         }
 
@@ -66,12 +76,20 @@ public class CandidatoRepository {
             try {
                 String prefixoStr = prefixo.toString();
                 String sql = "SELECT a.numero as id_candidato, a.cargo as id_cargo, a.nome, a.sexo, a.nascimento, a.cep, a.cidade, a.estado, a.status, " +
-                        "a.tipo_def, a.afro, a.solicitou_inscricao_negro " +
+                        "a.tipo_def, a.afro, case when a.tipo_def !='NENHUMA' and a.enviou_laudo then 'sim' else 'nao' end as pcd, a.cpf,\n" +
+                        "       CASE\n" +
+                        "           WHEN a.inscricao IS NOT NULL THEN lpad(a.cargo::text, 3, '0'::text) || lpad(a.inscricao::text, 7, '0'::text)\n" +
+                        "           ELSE lpad(a.cargo::text, 3, '0'::text) || lpad(a.numero::text, 7, '0'::text)\n" +
+                        "           END as inscricao " +
                         "FROM " + prefixoStr + "_candidato a ORDER BY a.numero";
 
-                if (!databaseUtils.existeColuna(prefixoStr + "_candidato", "solicitou_inscricao_negro")) {
+                if (!databaseUtils.existeColuna(prefixoStr + "_candidato", "afro")) {
                     sql = "SELECT a.numero as id_candidato, a.cargo as id_cargo, a.nome, a.sexo, a.nascimento, a.cep, a.cidade, a.estado, a.status, " +
-                            "a.tipo_def, false, false " +
+                            "a.tipo_def, false, case when a.tipo_def !='NENHUMA' and a.enviou_laudo then 'sim' else 'nao' end as pcd, a.cpf,\n" +
+                            "       CASE" +
+                            "           WHEN a.inscricao IS NOT NULL THEN lpad(a.cargo::text, 3, '0'::text) || lpad(a.inscricao::text, 7, '0'::text)\n" +
+                            "           ELSE lpad(a.cargo::text, 3, '0'::text) || lpad(a.numero::text, 7, '0'::text)\n" +
+                            "           END as inscricao " +
                             "FROM " + prefixoStr + "_candidato a ORDER BY a.numero";
                 }
 
@@ -81,8 +99,8 @@ public class CandidatoRepository {
                 for (Object[] row : resultList) {
                     Candidato candidato = new Candidato();
                     candidato.setPrefixo(prefixoStr);
-                    candidato.setIdCandidato(row[0] != null ? Long.parseLong(row[0].toString()) : 0L);
-                    candidato.setIdCargo(row[1] != null ? Long.parseLong(row[1].toString()) : 0L);
+                    candidato.setNumero(row[0] != null ? Long.parseLong(row[0].toString()) : 0L);
+                    candidato.setId_cargo(row[1] != null ? Long.parseLong(row[1].toString()) : 0L);
                     candidato.setNome(row[2] != null ? row[2].toString() : "");
                     candidato.setSexo(row[3] != null ? row[3].toString() : "");
                     candidato.setNascimento(row[4] != null ? row[4].toString() : "");
@@ -92,7 +110,9 @@ public class CandidatoRepository {
                     candidato.setStatus(row[8] != null ? row[8].toString() : "");
                     candidato.setTipoDef(row[9] != null ? row[9].toString() : "unknown");
                     candidato.setAfro(row[10] != null ? Boolean.parseBoolean(row[10].toString()) : false);
-                    candidato.setSolicitouInscricaoNegro(row[11] != null ? Boolean.parseBoolean(row[11].toString()) : false);
+                    candidato.setPcd(row[11] != null ? Boolean.parseBoolean(row[11].toString()) : false);
+                    candidato.setCpf(row[12] != null ? row[12].toString() : "");
+                    candidato.setInscricao(row[13] != null ? row[13].toString() : "");
                     candidatos.add(candidato);
                 }
             } catch (Exception e) {
