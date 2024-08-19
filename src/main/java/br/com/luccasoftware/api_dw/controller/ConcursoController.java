@@ -16,7 +16,7 @@ public class ConcursoController {
     @Autowired
     private ConcursoRepository concursoRepository;
 
-    @GetMapping("/retornarConcursos")
+    @GetMapping("/retornarConcursos/{inicio}")
     public List<Concurso> retornarConcursos(
             @RequestHeader(value = "Authorization") String authorizationHeader,
             @PathVariable int inicio) {
