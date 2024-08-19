@@ -3,6 +3,10 @@ package br.com.luccasoftware.api_dw.jpa;
 import br.com.luccasoftware.api_dw.utils.DatabaseUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -18,6 +22,7 @@ public class CandidatoRepository {
 
     @Autowired
     private DatabaseUtils databaseUtils;
+
 
     public List<Candidato> findAllCandidatos(String prefixo) {
         List<Candidato> candidatos = new ArrayList<>();
@@ -66,9 +71,9 @@ public class CandidatoRepository {
         return candidatos;
     }
 
-    public List<Candidato> findAllCandidatos() {
+    public List<Candidato> findAllCandidatos(int inicio) {
         List<Candidato> candidatos = new ArrayList<>();
-        String sqlConcursos = "SELECT a.nome FROM concurso a ORDER BY a.id";
+        String sqlConcursos = "SELECT a.nome FROM concurso a where EXTRACT(YEAR FROM a.\"dataInicioInscricao\") >= " + inicio + " ORDER BY a.id";
         Query queryConcursos = entityManager.createNativeQuery(sqlConcursos);
         List<Object> prefixos = queryConcursos.getResultList();
 

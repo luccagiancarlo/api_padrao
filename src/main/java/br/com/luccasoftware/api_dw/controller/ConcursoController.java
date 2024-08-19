@@ -5,10 +5,7 @@ import br.com.luccasoftware.api_dw.jpa.ConcursoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,7 +18,8 @@ public class ConcursoController {
 
     @GetMapping("/retornarConcursos")
     public List<Concurso> retornarConcursos(
-            @RequestHeader(value = "Authorization") String authorizationHeader) {
+            @RequestHeader(value = "Authorization") String authorizationHeader,
+            @PathVariable int inicio) {
 
         // Valida se o Authorization header está presente e começa com "Bearer "
         if (!authorizationHeader.startsWith("Bearer ")) {
@@ -35,6 +33,6 @@ public class ConcursoController {
         }
 
         // Retorna a lista de concursos
-        return concursoRepository.findAllConcursos();
+        return concursoRepository.findAllConcursos(inicio);
     }
 }

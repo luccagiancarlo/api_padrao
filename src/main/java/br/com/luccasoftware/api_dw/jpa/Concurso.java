@@ -5,32 +5,21 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Column;
 import jakarta.persistence.Table;
+
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "concurso")
+
 public class Concurso {
 
-    @Id
+
     private Long id;
-
-    @Column(name = "idContratante")
     private Long idContratante;
-
     private String nome;
     private String descricao;
-
-    @Column(name = "dataInicioInscricao")
-    private LocalDate dataInicioInscricao;
-
-    @Column(name = "dataFinalInscricao")
-    private LocalDate dataFinalInscricao;
-
+    private String dataInicioInscricao;
+    private String dataFinalInscricao;
     private String status;
-
-    @Column(name = "numero_edital")
     private String numeroEdital;
-
     private String edital;
 
     // Getters and setters
@@ -66,19 +55,19 @@ public class Concurso {
         this.descricao = descricao;
     }
 
-    public LocalDate getDataInicioInscricao() {
+    public String getDataInicioInscricao() {
         return dataInicioInscricao;
     }
 
-    public void setDataInicioInscricao(LocalDate dataInicioInscricao) {
+    public void setDataInicioInscricao(String dataInicioInscricao) {
         this.dataInicioInscricao = dataInicioInscricao;
     }
 
-    public LocalDate getDataFinalInscricao() {
+    public String getDataFinalInscricao() {
         return dataFinalInscricao;
     }
 
-    public void setDataFinalInscricao(LocalDate dataFinalInscricao) {
+    public void setDataFinalInscricao(String dataFinalInscricao) {
         this.dataFinalInscricao = dataFinalInscricao;
     }
 

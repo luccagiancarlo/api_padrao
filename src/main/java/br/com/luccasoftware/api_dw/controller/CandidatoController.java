@@ -20,7 +20,8 @@ public class CandidatoController {
     @GetMapping("/retornarCandidatos/{prefixo}")
     public List<Candidato> retornarCandidatos(
             @RequestHeader(value = "Authorization") String authorizationHeader,
-            @PathVariable String prefixo) {
+            @PathVariable String prefixo,
+            @RequestParam(defaultValue = "2023") int inicio) {
 
         // Valida se o Authorization header está presente e começa com "Bearer "
         if (!authorizationHeader.startsWith("Bearer ")) {
@@ -37,7 +38,7 @@ public class CandidatoController {
         List<Candidato> candidatos = new ArrayList<>();
         if (prefixo != null) {
             if (prefixo.equals("all")) {
-                candidatos = candidatoRepository.findAllCandidatos();
+                candidatos = candidatoRepository.findAllCandidatos(inicio);
             } else {
                 candidatos = candidatoRepository.findAllCandidatos(prefixo);
             }
