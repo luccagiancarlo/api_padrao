@@ -1,11 +1,11 @@
 package br.com.luccasoftware.api_dw.jpa;
 
+import br.com.luccasoftware.api_dw.dto.Concurso;
 import br.com.luccasoftware.api_dw.utils.DatabaseUtils;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 
@@ -36,6 +36,7 @@ public class ConcursoRepository  {
             concurso.setDataFinalInscricao(row[5] != null ? row[5].toString() : "");
             concurso.setStatus(row[6] != null ? row[6].toString() : "");
             concurso.setNumeroEdital(row[7] != null ? row[7].toString() : "");
+            concurso.setEdital(row[2] != null ? row[2].toString() : "");
             concursos.add(concurso);
         }
 

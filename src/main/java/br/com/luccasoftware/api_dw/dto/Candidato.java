@@ -1,4 +1,4 @@
-package br.com.luccasoftware.api_dw.jpa;
+package br.com.luccasoftware.api_dw.dto;
 
 public class Candidato {
 

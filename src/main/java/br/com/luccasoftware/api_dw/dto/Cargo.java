@@ -1,9 +1,4 @@
-package br.com.luccasoftware.api_dw.jpa;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Column;
-import jakarta.persistence.Table;
+package br.com.luccasoftware.api_dw.dto;
 
 
 public class Cargo {
@@ -17,6 +12,12 @@ public class Cargo {
     private Integer vagas;
     private Integer vagaspne;
     private Integer vagasAfro;
+    private Integer tt_ins;
+    private Integer tt_ins_homologados;
+    private Integer tt_ins_afro;
+    private Integer tt_ins_pcd;
+    private Integer tt_ins_isentos;
+
 
     public String getPrefixo() {
         return prefixo;
@@ -88,6 +89,46 @@ public class Cargo {
 
     public void setVagasAfro(Integer vagasAfro) {
         this.vagasAfro = vagasAfro;
+    }
+
+    public Integer getTt_ins() {
+        return tt_ins;
+    }
+
+    public void setTt_ins(Integer tt_ins) {
+        this.tt_ins = tt_ins;
+    }
+
+    public Integer getTt_ins_homologados() {
+        return tt_ins_homologados;
+    }
+
+    public void setTt_ins_homologados(Integer tt_ins_homologados) {
+        this.tt_ins_homologados = tt_ins_homologados;
+    }
+
+    public Integer getTt_ins_afro() {
+        return tt_ins_afro;
+    }
+
+    public void setTt_ins_afro(Integer tt_ins_afro) {
+        this.tt_ins_afro = tt_ins_afro;
+    }
+
+    public Integer getTt_ins_pcd() {
+        return tt_ins_pcd;
+    }
+
+    public void setTt_ins_pcd(Integer tt_ins_pcd) {
+        this.tt_ins_pcd = tt_ins_pcd;
+    }
+
+    public Integer getTt_ins_isentos() {
+        return tt_ins_isentos;
+    }
+
+    public void setTt_ins_isentos(Integer tt_ins_isentos) {
+        this.tt_ins_isentos = tt_ins_isentos;
     }
 
 

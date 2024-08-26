@@ -1,5 +1,6 @@
 package br.com.luccasoftware.api_dw.jpa;
 
+import br.com.luccasoftware.api_dw.dto.Cargo;
 import br.com.luccasoftware.api_dw.utils.DatabaseUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -81,6 +82,19 @@ public class CargoRepository {
                     cargo.setVagas(row[5] != null ? Integer.parseInt(row[5].toString()) : 0);
                     cargo.setVagaspne(row[6] != null ? Integer.parseInt(row[6].toString()) : 0);
                     cargo.setVagasAfro(row[7] != null ? Integer.parseInt(row[7].toString()) : 0);
+                    int tt_ins = qde_inscritos(prefixoStr, row[0].toString());
+                    int tt_ins_homol = qde_inscritos_homol(prefixoStr, row[0].toString());
+                    int tt_afro = qde_inscritos_afro(prefixoStr, row[0].toString());
+                    int tt_pcd = qde_inscritos_pcd(prefixoStr, row[0].toString());
+                    int tt_isentos = qde_inscritos_isentos(prefixoStr, row[0].toString());
+
+                    cargo.setTt_ins(tt_ins);
+                    cargo.setTt_ins_homologados(tt_ins_homol);
+                    cargo.setTt_ins_afro(tt_afro);
+                    cargo.setTt_ins_pcd(tt_pcd);
+                    cargo.setTt_ins_isentos(tt_isentos);
+
+
 
                     cargos.add(cargo);
                 }
@@ -90,6 +104,81 @@ public class CargoRepository {
         }
 
         return cargos;
+    }
+
+    private int qde_inscritos (String prefixo, String id_cargo) {
+        int r = 0;
+        String vsql = "select count(numero) from " + prefixo + "_candidato a where a.cargo="+id_cargo+" and (a.status='Pagamento confirmado' or a.status='Aguardando pagamento')";
+        Query query = entityManager.createNativeQuery(vsql);
+        List<Object> q = query.getResultList();
+        for (Object o : q) {
+            try {
+                r = Integer.parseInt(o.toString());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return r;
+    }
+
+    private int qde_inscritos_homol (String prefixo, String id_cargo) {
+        int r = 0;
+        String vsql = "select count(numero) from " + prefixo + "_candidato a where a.cargo="+id_cargo+" and a.status='Pagamento confirmado' ";
+        Query query = entityManager.createNativeQuery(vsql);
+        List<Object> q = query.getResultList();
+        for (Object o : q) {
+            try {
+                r = Integer.parseInt(o.toString());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return r;
+    }
+
+    private int qde_inscritos_afro (String prefixo, String id_cargo) {
+        int r = 0;
+        String vsql = "select count(numero) from " + prefixo + "_candidato a where a.cargo="+id_cargo+" and a.status='Pagamento confirmado' and a.afro='sim'";
+        Query query = entityManager.createNativeQuery(vsql);
+        List<Object> q = query.getResultList();
+        for (Object o : q) {
+            try {
+                r = Integer.parseInt(o.toString());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return r;
+    }
+
+    private int qde_inscritos_pcd (String prefixo, String id_cargo) {
+        int r = 0;
+        String vsql = "select count(numero) from " + prefixo + "_candidato a where a.cargo="+id_cargo+" and a.status='Pagamento confirmado' and a.tipo_def !='NENHUMA' and a.enviou_laudo";
+        Query query = entityManager.createNativeQuery(vsql);
+        List<Object> q = query.getResultList();
+        for (Object o : q) {
+            try {
+                r = Integer.parseInt(o.toString());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return r;
+    }
+
+    private int qde_inscritos_isentos (String prefixo, String id_cargo) {
+        int r = 0;
+        String vsql = "select count(numero) from " + prefixo + "_candidato a where a.cargo="+id_cargo+" and a.status='Pagamento confirmado' and a.isento";
+        Query query = entityManager.createNativeQuery(vsql);
+        List<Object> q = query.getResultList();
+        for (Object o : q) {
+            try {
+                r = Integer.parseInt(o.toString());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return r;
     }
 }
 

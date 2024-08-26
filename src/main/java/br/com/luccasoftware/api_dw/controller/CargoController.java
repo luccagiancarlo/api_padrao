@@ -1,6 +1,6 @@
 package br.com.luccasoftware.api_dw.controller;
 
-import br.com.luccasoftware.api_dw.jpa.Cargo;
+import br.com.luccasoftware.api_dw.dto.Cargo;
 import br.com.luccasoftware.api_dw.jpa.CargoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;

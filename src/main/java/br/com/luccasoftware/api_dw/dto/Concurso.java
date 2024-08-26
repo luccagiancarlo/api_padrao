@@ -1,12 +1,4 @@
-package br.com.luccasoftware.api_dw.jpa;
-
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Column;
-import jakarta.persistence.Table;
-
-import java.time.LocalDate;
+package br.com.luccasoftware.api_dw.dto;
 
 
 public class Concurso {

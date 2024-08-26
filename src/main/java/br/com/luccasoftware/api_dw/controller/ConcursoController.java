@@ -1,6 +1,6 @@
 package br.com.luccasoftware.api_dw.controller;
 
-import br.com.luccasoftware.api_dw.jpa.Concurso;
+import br.com.luccasoftware.api_dw.dto.Concurso;
 import br.com.luccasoftware.api_dw.jpa.ConcursoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;

@@ -1,12 +1,9 @@
 package br.com.luccasoftware.api_dw.jpa;
 
+import br.com.luccasoftware.api_dw.dto.Candidato;
 import br.com.luccasoftware.api_dw.utils.DatabaseUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
