@@ -1,0 +1,79 @@
+package br.com.luccasoftware.api_dw.jpa;
+
+
+import br.com.luccasoftware.api_dw.dto.Evento;
+import br.com.luccasoftware.api_dw.dto.EventoEnsalamento;
+import br.com.luccasoftware.api_dw.utils.DatabaseUtils;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Repository
+public class EventoEnsalamentoRepository {
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    @Autowired
+    private DatabaseUtils databaseUtils;
+
+    public List<EventoEnsalamento> findAll(String prefixo) {
+        List<EventoEnsalamento> eventos = new ArrayList<>();
+        String vsql = "select a.id_evento, a.descricao as concurso, b.id_local, b.id_cargo, count(b.inscricao) as tt_ensalado\n" +
+                "from ensalamento a, ensalamento_candidato b where a.id = b.id_ensalamento and a.descricao = '"+prefixo+"' \n" +
+                "group by a.id_evento, a.descricao, b.id_local, b.id_cargo;" ;
+
+        //System.out.println(vsql);
+
+        Query q = entityManager.createNativeQuery(vsql);
+        List<Object[]> resultList = q.getResultList();
+        for (Object[] row : resultList) {
+            EventoEnsalamento evento = new EventoEnsalamento();
+            evento.setId_evento(row[0] != null ? Long.parseLong(row[0].toString()) : 0L);
+            evento.setConcurso(row[1] != null ? row[1].toString() : "");
+            evento.setId_local(row[2] != null ? Long.parseLong(row[2].toString()) : 0L);
+            evento.setId_cargo(row[3] != null ? Long.parseLong(row[3].toString()) : 0L);
+            evento.setTt_ensalado(row[4] != null ? Long.parseLong(row[4].toString()) : 0L);
+
+            eventos.add(evento);
+        }
+
+        return eventos;
+
+
+    }
+
+    public List<EventoEnsalamento> findAll() {
+        List<EventoEnsalamento> eventos = new ArrayList<>();
+        String vsql = "select a.id_evento, a.descricao as concurso, b.id_local, b.id_cargo, count(b.inscricao) as tt_ensalado\n" +
+                "from ensalamento a, ensalamento_candidato b where a.id = b.id_ensalamento  \n" +
+                "group by a.id_evento, a.descricao, b.id_local, b.id_cargo;" ;
+
+        //System.out.println(vsql);
+
+        Query q = entityManager.createNativeQuery(vsql);
+        List<Object[]> resultList = q.getResultList();
+        for (Object[] row : resultList) {
+            EventoEnsalamento evento = new EventoEnsalamento();
+            evento.setId_evento(row[0] != null ? Long.parseLong(row[0].toString()) : 0L);
+            evento.setConcurso(row[1] != null ? row[1].toString() : "");
+            evento.setId_local(row[2] != null ? Long.parseLong(row[2].toString()) : 0L);
+            evento.setId_cargo(row[3] != null ? Long.parseLong(row[3].toString()) : 0L);
+            evento.setTt_ensalado(row[4] != null ? Long.parseLong(row[4].toString()) : 0L);
+
+            eventos.add(evento);
+        }
+
+        return eventos;
+
+
+    }
+
+
+}
+

@@ -3,6 +3,7 @@ package br.com.luccasoftware.api_dw.dto;
 public class Evento {
 
     private Long id;
+    private String concurso;
     private String descricao;
     private String status;
     private Double valorBase;
@@ -14,6 +15,7 @@ public class Evento {
     private Long idItemProjetoEventoIcode;
     private Long idItemProjetoLocacaoIcode;
     private Long idItemProjetoLancheIcode;
+
 
 
     public Evento(){
@@ -116,6 +118,15 @@ public class Evento {
 
     public void setIdItemProjetoLancheIcode(Long idItemProjetoLancheIcode) {
         this.idItemProjetoLancheIcode = idItemProjetoLancheIcode;
+    }
+
+
+    public String getConcurso() {
+        return concurso;
+    }
+
+    public void setConcurso(String concurso) {
+        this.concurso = concurso;
     }
 
 
