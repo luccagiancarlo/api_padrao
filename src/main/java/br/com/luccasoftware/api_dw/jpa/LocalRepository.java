@@ -23,7 +23,7 @@ public class LocalRepository {
 
     public List<Local> findAll(String prefixo) {
         String sql = "SELECT a.id as id_local, a.cidade, a.escola, a.horario as data_uso, \n" +
-                " a.periodo, a.id_local_aplicacao_evento, a.cep, a.campos_adicionais " +
+                " a.periodo, 0, 0, a.campos_adicionais " +
                 "FROM " + prefixo + "_local a ORDER BY a.id";
 
         Query query = entityManager.createNativeQuery(sql);
@@ -48,8 +48,8 @@ public class LocalRepository {
         return locais;
     }
 
-    public List<Cargo> findAll(int inicio) {
-        List<Cargo> cargos = new ArrayList<>();
+    public List<Local> findAll(int inicio) {
+        List<Local> locais = new ArrayList<>();
         String sqlConcursos = "SELECT a.nome FROM concurso a where EXTRACT(YEAR FROM a.\"dataInicioInscricao\") >="+inicio+"   ORDER BY a.id";
         Query queryConcursos = entityManager.createNativeQuery(sqlConcursos);
         List<Object> prefixos = queryConcursos.getResultList();
@@ -62,7 +62,7 @@ public class LocalRepository {
 
                 Query query = entityManager.createNativeQuery(sql);
                 List<Object[]> resultList = query.getResultList();
-                List<Local> locais = new ArrayList<>();
+
 
                 for (Object[] row : resultList) {
                     Local local = new Local();
@@ -83,7 +83,7 @@ public class LocalRepository {
             }
         }
 
-        return cargos;
+        return locais;
     }
 
 
