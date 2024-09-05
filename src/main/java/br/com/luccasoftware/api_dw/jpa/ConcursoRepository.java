@@ -21,9 +21,9 @@ public class ConcursoRepository  {
     @Autowired
     private DatabaseUtils databaseUtils;
 
-    public List<Concurso> findAllConcursos(int inicio) {
+    public List<Concurso> findAllConcursos(int inicio, int fim) {
         List<Concurso> concursos = new ArrayList<>();
-        String sqlConcursos = "select a.id as id_concurso, a.\"idContratante\" as id_contratante, a.nome, a.descricao, a.\"dataInicioInscricao\", a.\"dataFinalInscricao\", a.status, a.numero_edital FROM concurso a where EXTRACT(YEAR FROM a.\"dataInicioInscricao\") >=" + inicio + "   ORDER BY a.id";
+        String sqlConcursos = "select a.id as id_concurso, a.\"idContratante\" as id_contratante, a.nome, a.descricao, a.\"dataInicioInscricao\", a.\"dataFinalInscricao\", a.status, a.numero_edital FROM concurso a where EXTRACT(YEAR FROM a.\"dataInicioInscricao\") between "+inicio+" and "+fim+"   ORDER BY a.id";
         Query queryConcursos = entityManager.createNativeQuery(sqlConcursos);
         List<Object[]> resultList = queryConcursos.getResultList();
         for (Object[] row : resultList) {

@@ -19,7 +19,8 @@ public class ConcursoController {
     @GetMapping("/retornarConcursos/{inicio}")
     public List<Concurso> retornarConcursos(
             @RequestHeader(value = "Authorization") String authorizationHeader,
-            @PathVariable int inicio) {
+            @RequestParam(defaultValue = "0") int inicio,
+            @RequestParam(defaultValue = "0") int fim) {
 
         // Valida se o Authorization header está presente e começa com "Bearer "
         if (!authorizationHeader.startsWith("Bearer ")) {
@@ -33,6 +34,6 @@ public class ConcursoController {
         }
 
         // Retorna a lista de concursos
-        return concursoRepository.findAllConcursos(inicio);
+        return concursoRepository.findAllConcursos(inicio, fim);
     }
 }

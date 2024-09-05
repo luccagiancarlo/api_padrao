@@ -23,7 +23,8 @@ public class LocalController {
     public List<Local> retornarLocais(
             @RequestHeader(value = "Authorization") String authorizationHeader,
             @PathVariable String prefixo,
-            @RequestParam(defaultValue = "2023") int inicio) {
+            @RequestParam(defaultValue = "0") int inicio,
+            @RequestParam(defaultValue = "0") int fim) {
 
         // Valida se o Authorization header está presente e começa com "Bearer "
         if (!authorizationHeader.startsWith("Bearer ")) {
@@ -40,7 +41,7 @@ public class LocalController {
         List<Local> locais = new ArrayList<>();
         if (prefixo != null) {
             if (prefixo.equals("all")) {
-                locais = localRepository.findAll(inicio);
+                locais = localRepository.findAll(inicio, fim);
             } else {
                 locais = localRepository.findAll(prefixo);
             }

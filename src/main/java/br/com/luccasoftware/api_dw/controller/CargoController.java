@@ -21,7 +21,8 @@ public class CargoController {
     public List<Cargo> retornarCargos(
             @RequestHeader(value = "Authorization") String authorizationHeader,
             @PathVariable String prefixo,
-            @RequestParam(defaultValue = "2023") int inicio) {
+            @RequestParam(defaultValue = "0") int inicio,
+            @RequestParam(defaultValue = "0") int fim) {
 
         // Valida se o Authorization header está presente e começa com "Bearer "
         if (!authorizationHeader.startsWith("Bearer ")) {
@@ -38,7 +39,7 @@ public class CargoController {
         List<Cargo> cargos = new ArrayList<>();
         if (prefixo != null) {
             if (prefixo.equals("all")) {
-                cargos = cargoRepository.findAllCargos(inicio);
+                cargos = cargoRepository.findAllCargos(inicio, fim);
             } else {
                 cargos = cargoRepository.findAllCargos(prefixo);
             }

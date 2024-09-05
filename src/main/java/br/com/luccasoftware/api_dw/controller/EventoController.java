@@ -23,7 +23,8 @@ public class EventoController {
     public List<Evento> retornarCargos(
             @RequestHeader(value = "Authorization") String authorizationHeader,
             @PathVariable String prefixo,
-            @RequestParam(defaultValue = "2023") int inicio) {
+            @RequestParam(defaultValue = "0") int inicio,
+            @RequestParam(defaultValue = "0") int fim) {
 
         // Valida se o Authorization header está presente e começa com "Bearer "
         if (!authorizationHeader.startsWith("Bearer ")) {
@@ -40,7 +41,7 @@ public class EventoController {
         List<Evento> eventos = new ArrayList<>();
         if (prefixo != null) {
             if (prefixo.equals("all")) {
-                eventos = eventoRepository.findAll(inicio);
+                eventos = eventoRepository.findAll(inicio, fim);
             } else {
                 eventos = eventoRepository.findAll(prefixo);
             }

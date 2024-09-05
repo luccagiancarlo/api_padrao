@@ -23,7 +23,8 @@ public class ResultadoCargoController {
     public List<ResultadoCargo> retornarLocais(
             @RequestHeader(value = "Authorization") String authorizationHeader,
             @PathVariable String prefixo,
-            @RequestParam(defaultValue = "2023") int inicio) {
+            @RequestParam(defaultValue = "0") int inicio,
+            @RequestParam(defaultValue = "0") int fim) {
 
         // Valida se o Authorization header está presente e começa com "Bearer "
         if (!authorizationHeader.startsWith("Bearer ")) {
@@ -40,7 +41,7 @@ public class ResultadoCargoController {
         List<ResultadoCargo> res = new ArrayList<>();
         if (prefixo != null) {
             if (prefixo.equals("all")) {
-                res = resultadoCargoRepository.findAll(inicio);
+                res = resultadoCargoRepository.findAll(inicio, fim);
             } else {
                 res = resultadoCargoRepository.findAll(prefixo);
             }

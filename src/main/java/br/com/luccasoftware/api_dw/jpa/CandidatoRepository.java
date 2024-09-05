@@ -68,9 +68,9 @@ public class CandidatoRepository {
         return candidatos;
     }
 
-    public List<Candidato> findAllCandidatos(int inicio) {
+    public List<Candidato> findAllCandidatos(int inicio, int fim) {
         List<Candidato> candidatos = new ArrayList<>();
-        String sqlConcursos = "SELECT a.nome FROM concurso a where EXTRACT(YEAR FROM a.\"dataInicioInscricao\") >= " + inicio + " ORDER BY a.id";
+        String sqlConcursos = "SELECT a.nome FROM concurso a where EXTRACT(YEAR FROM a.\"dataInicioInscricao\") between "+inicio+" and "+fim+"   ORDER BY a.id";
         Query queryConcursos = entityManager.createNativeQuery(sqlConcursos);
         List<Object> prefixos = queryConcursos.getResultList();
 
