@@ -2,7 +2,9 @@ package br.com.luccasoftware.api_dw.controller;
 
 
 import br.com.luccasoftware.api_dw.dto.Evento;
+import br.com.luccasoftware.api_dw.dto.LocalEvento;
 import br.com.luccasoftware.api_dw.jpa.EventoRepository;
+import br.com.luccasoftware.api_dw.jpa.LocalEventoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,16 +15,16 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api_dw/v1")
-public class EventoController {
+public class LocalEventoController {
 
 
     @Autowired
-    private EventoRepository eventoRepository;
+    private LocalEventoRepository localEventoRepository;
 
-    @GetMapping("/retornarEventos/{status}")
-    public List<Evento> retornarCargos(
+    @GetMapping("/retornarLocalEvento/{id_evento}")
+    public List<LocalEvento> retornarLocalEvento(
             @RequestHeader(value = "Authorization") String authorizationHeader,
-            @PathVariable String status) {
+            @PathVariable String id_evento) {
 
         // Valida se o Authorization header está presente e começa com "Bearer "
         if (!authorizationHeader.startsWith("Bearer ")) {
@@ -36,15 +38,19 @@ public class EventoController {
         }
 
         // Retorna a lista de cargos com o prefixo especificado
-        List<Evento> eventos = new ArrayList<>();
-        if (status != null) {
-            if (status.equals("all")) {
-                eventos = eventoRepository.findAll();
+        List<LocalEvento> locaisEventos = new ArrayList<>();
+        if (id_evento != null) {
+            if (id_evento.equals("all")) {
+                locaisEventos = localEventoRepository.findAll();
             } else {
-                eventos = eventoRepository.findAll(status);
+                try {
+                    locaisEventos = localEventoRepository.findAll(Long.parseLong(id_evento));
+                } catch (Exception e) {
+                    locaisEventos = localEventoRepository.findAll();
+                }
             }
         }
-        return eventos;
+        return locaisEventos;
     }
 
 
