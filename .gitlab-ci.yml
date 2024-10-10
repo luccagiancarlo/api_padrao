@@ -1,0 +1,63 @@
+stages:
+  - compile
+  - build
+  - deploy
+
+default:
+  tags:
+    - docker
+    - linux
+  interruptible: true
+
+workflow:
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+      when: always
+    - when: never
+
+compile:jdk21:
+  stage: compile
+  image: maven:3.9.9-amazoncorretto-21
+  cache:
+    paths:
+      - $CI_PROJECT_DIR/.m2/repository
+  variables:
+    MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true"
+    MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=WARN -Dorg.slf4j.simpleLogger.showDateTime=true -Djava.awt.headless=true"
+  script:
+    - mvn $MAVEN_CLI_OPTS clean package -Dmaven.test.skip=true
+  artifacts:
+    paths:
+      - $CI_PROJECT_DIR/target/*.jar
+
+docker_build_publish:
+  stage: build
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  script:
+    - mkdir -p /kaniko/.docker
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"auth\":\"$(echo -n ${CI_REGISTRY_USER}:${CI_REGISTRY_PASSWORD} | base64)\"}}}" > /kaniko/.docker/config.json
+    - |
+      /kaniko/executor \
+      --context $CI_PROJECT_DIR/ \
+      --dockerfile $CI_PROJECT_DIR/Dockerfile \
+      --destination $CI_REGISTRY_IMAGE:$(echo $CI_COMMIT_SHA | cut -c1-8) --cache=false
+  rules:
+    - exists:
+        - Dockerfile
+
+deploy:prod:
+  stage: deploy
+  image: docker:19.03.1
+  tags:
+    - homologacao
+  before_script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+  script:
+    - docker stack deploy -c $CI_PROJECT_DIR/.gitlab/app.yml --with-registry-auth api_dw
+  environment:
+    name: ${CI_COMMIT_BRANCH}-api_dw
+    url: https://${DOMINIO_APP}
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
