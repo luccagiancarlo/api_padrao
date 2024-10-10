@@ -17,9 +17,6 @@ RUN rm -r /usr/share/zoneinfo/Africa && \
     rm -r /usr/share/zoneinfo/Chile && \
     rm -r /usr/share/zoneinfo/Canada
 
-RUN sed -i '/pt_BR.UTF-8/s/^# //g' /etc/locale.gen && \
-    locale-gen
-
 ENV TZ America/Sao_Paulo
 ENV LANG pt_BR.UTF-8
 ENV LANGUAGE pt_BR.UTF-8
