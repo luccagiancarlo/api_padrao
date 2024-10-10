@@ -4,10 +4,10 @@ services:
     image: ${CI_REGISTRY_IMAGE}:${BUILD_VERSION}
     environment:
       - SPRING_PROFILES_ACTIVE=prod
-      - DB_HOST=$DB_HOST
-      - DB_NAME=$DB_NAME
-      - DB_USER=$DB_USER
-      - DB_PASSWORD=$DB_PASSWORD
+      - DB_HOST=${DB_HOST}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
     networks:
       - proxy-reverse
     deploy:
