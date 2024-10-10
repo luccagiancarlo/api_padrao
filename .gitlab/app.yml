@@ -1,6 +1,6 @@
 version: '3.8'
 services:
-  api_dw:
+  apidw:
     image: ${CI_REGISTRY_IMAGE}:${BUILD_VERSION}
     environment:
       - SPRING_PROFILES_ACTIVE=prod
@@ -14,11 +14,11 @@ services:
       replicas: 1
       labels:
         - "traefik.enable=true"
-        - "traefik.http.routers.api_dw.entrypoints=websecure,web"
-        - "traefik.http.routers.api_dw.rule=Host(`${DOMINIO_APP}`)"
-        - "traefik.http.routers.api_dw.service=api_dw"
-        - "traefik.http.routers.api_dw.tls.certresolver=letsencrypt"
-        - "traefik.http.services.api_dw.loadbalancer.server.port=8080"
+        - "traefik.http.routers.apidw.entrypoints=websecure,web"
+        - "traefik.http.routers.apidw.rule=Host(`${DOMINIO_APP}`)"
+        - "traefik.http.routers.apidw.service=apidw"
+        - "traefik.http.routers.apidw.tls.certresolver=letsencrypt"
+        - "traefik.http.services.apidw.loadbalancer.server.port=8080"
 
 networks:
   proxy-reverse:
