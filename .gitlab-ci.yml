@@ -55,6 +55,8 @@ deploy:prod:
   before_script:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
   script:
+    - cat $CI_PROJECT_DIR/.gitlab/app.yml
+    - printenv
     - docker stack deploy -c $CI_PROJECT_DIR/.gitlab/app.yml --with-registry-auth api_dw
   environment:
     name: ${CI_COMMIT_BRANCH}-api_dw
