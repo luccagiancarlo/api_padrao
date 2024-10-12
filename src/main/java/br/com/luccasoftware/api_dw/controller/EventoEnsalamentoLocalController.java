@@ -1,8 +1,8 @@
 package br.com.luccasoftware.api_dw.controller;
 
 
-import br.com.luccasoftware.api_dw.dto.EventoEnsalamento;
 import br.com.luccasoftware.api_dw.dto.EventoEnsalamentoCandidato;
+import br.com.luccasoftware.api_dw.dto.EventoEnsalamentoLocal;
 import br.com.luccasoftware.api_dw.jpa.EventoEnsalamentoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -14,17 +14,16 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api_dw/v1")
-public class EventoEnsalamentoCandidatoController {
+public class EventoEnsalamentoLocalController {
 
 
     @Autowired
     private EventoEnsalamentoRepository eventoEnsalamentoRepository;
 
-    @GetMapping("/retornarEventoEnsalamentoCandidatos/{id_evento}")
-    public List<EventoEnsalamentoCandidato> retornarEventoEnsalamentoCandidatos(
+    @GetMapping("/retornarEventoEnsalamentoLocal/{id_evento}")
+    public List<EventoEnsalamentoLocal> retornarEventoEnsalamentoLocal(
             @RequestHeader(value = "Authorization") String authorizationHeader,
-            @PathVariable long id_evento,
-            @RequestParam(defaultValue = "0") long id_local) {
+            @PathVariable long id_evento) {
 
         // Valida se o Authorization header está presente e começa com "Bearer "
         if (!authorizationHeader.startsWith("Bearer ")) {
@@ -38,13 +37,13 @@ public class EventoEnsalamentoCandidatoController {
         }
 
         // Retorna a lista de cargos com o prefixo especificado
-        List<EventoEnsalamentoCandidato> can = new ArrayList<>();
+        List<EventoEnsalamentoLocal> locais = new ArrayList<>();
         if (id_evento > 0) {
 
-                can = eventoEnsalamentoRepository.findAll(id_evento, id_local);
+                locais = eventoEnsalamentoRepository.findAll(id_evento);
 
         }
-        return can;
+        return locais;
     }
 
 
