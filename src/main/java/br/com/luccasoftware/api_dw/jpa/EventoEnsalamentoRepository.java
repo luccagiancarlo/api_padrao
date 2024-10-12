@@ -3,6 +3,7 @@ package br.com.luccasoftware.api_dw.jpa;
 
 import br.com.luccasoftware.api_dw.dto.Evento;
 import br.com.luccasoftware.api_dw.dto.EventoEnsalamento;
+import br.com.luccasoftware.api_dw.dto.EventoEnsalamentoCandidato;
 import br.com.luccasoftware.api_dw.utils.DatabaseUtils;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -26,7 +27,7 @@ public class EventoEnsalamentoRepository {
         List<EventoEnsalamento> eventos = new ArrayList<>();
         String vsql = "select a.id_evento, a.descricao as concurso, b.id_local, b.id_cargo, count(b.inscricao) as tt_ensalado\n" +
                 "from ensalamento a, ensalamento_candidato b where a.id = b.id_ensalamento and a.descricao = '"+prefixo+"' \n" +
-                "group by a.id_evento, a.descricao, b.id_local, b.id_cargo;" ;
+                "group by a.id_evento, a.descricao, b.id_local, b.id_cargo" ;
 
         //System.out.println(vsql);
 
@@ -52,7 +53,7 @@ public class EventoEnsalamentoRepository {
         List<EventoEnsalamento> eventos = new ArrayList<>();
         String vsql = "select a.id_evento, a.descricao as concurso, b.id_local, b.id_cargo, count(b.inscricao) as tt_ensalado\n" +
                 "from ensalamento a, ensalamento_candidato b where a.id = b.id_ensalamento  \n" +
-                "group by a.id_evento, a.descricao, b.id_local, b.id_cargo;" ;
+                "group by a.id_evento, a.descricao, b.id_local, b.id_cargo" ;
 
         //System.out.println(vsql);
 
@@ -70,6 +71,35 @@ public class EventoEnsalamentoRepository {
         }
 
         return eventos;
+
+
+    }
+
+    public List<EventoEnsalamentoCandidato> findAll(long id_evento) {
+        List<EventoEnsalamentoCandidato> can = new ArrayList<>();
+        String vsql = "select a.id_evento, a.descricao, b.inscricao, c.cargo, c.numero, c.cpf, trim(c.nome) as nome,  b.nome_cargo, b.periodo from ensalamento a, ensalamento_candidato b, pmcamaragibe2024_candidato c\n" +
+                "where a.id = b.id_ensalamento and b.cpf = c.cpf and b.id_cargo = c.cargo and a.id_evento="+id_evento+" order by trim(c.nome)" ;
+
+        //System.out.println(vsql);
+
+        Query q = entityManager.createNativeQuery(vsql);
+        List<Object[]> resultList = q.getResultList();
+        for (Object[] row : resultList) {
+            EventoEnsalamentoCandidato ent = new EventoEnsalamentoCandidato();
+            ent.setId_evento(row[0] != null ? Long.parseLong(row[0].toString()) : 0L);
+            ent.setDescricao(row[1] != null ? row[1].toString() : "");
+            ent.setInscricao(row[2] != null ? row[2].toString() : "");
+            ent.setId_cargo(row[3] != null ? Long.parseLong(row[3].toString()) : 0L);
+            ent.setNumero(row[4] != null ? Long.parseLong(row[4].toString()) : 0L);
+            ent.setCpf(row[5] != null ? row[5].toString() : "");
+            ent.setNome(row[6] != null ? row[6].toString() : "");
+            ent.setCargo(row[7] != null ? row[7].toString() : "");
+            ent.setPeriodo(row[8] != null ? row[8].toString() : "");
+
+            can.add(ent);
+        }
+
+        return can;
 
 
     }
