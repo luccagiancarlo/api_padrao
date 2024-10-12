@@ -37,6 +37,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // Desabilitando CSRF
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api_dw/v1/autenticar").permitAll()
+                        .requestMatchers("/api_dw/v1/autenticar_app").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

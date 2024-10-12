@@ -1,13 +1,10 @@
-package br.com.luccasoftware.api_dw.jpa;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+package br.com.luccasoftware.api_dw.dto;
 
 
-@Entity
-public class Usuario {
 
-    @Id
+public class UsuarioAdmin {
+
+
     private String login;
     private String email;
     private String senha;

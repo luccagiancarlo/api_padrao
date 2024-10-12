@@ -12,4 +12,6 @@ public interface UsuarioRepository extends CrudRepository<Usuario, Long> {
 
     @Query(value = "SELECT COUNT(*) FROM usuario WHERE email = ?1 AND senha = ?2 AND block = false", nativeQuery = true)
     int countByEmailAndSenhaAndNotBlock(String email, String senha);
+
+
 }
