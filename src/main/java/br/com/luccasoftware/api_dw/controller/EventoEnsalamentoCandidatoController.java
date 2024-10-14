@@ -40,8 +40,11 @@ public class EventoEnsalamentoCandidatoController {
         // Retorna a lista de cargos com o prefixo especificado
         List<EventoEnsalamentoCandidato> can = new ArrayList<>();
         if (id_evento > 0) {
-
-                can = eventoEnsalamentoRepository.findAll(id_evento, id_local);
+                if (id_local > 0) {
+                    can = eventoEnsalamentoRepository.findAll(id_evento, id_local);
+                } else {
+                    can = eventoEnsalamentoRepository.buscarTodosCandidatos(id_evento);
+                }
 
         }
         return can;
