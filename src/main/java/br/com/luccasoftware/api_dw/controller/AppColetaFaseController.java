@@ -165,4 +165,11 @@ public class AppColetaFaseController {
         // Retorna uma mensagem de sucesso se autenticado
         return "Autenticação bem-sucedida! A API está funcionando corretamente.";
     }
+
+    @GetMapping("/coleta-fase/teste2")
+    public String teste2() {
+
+        return "A API está funcionando corretamente.";
+    }
+
 }
