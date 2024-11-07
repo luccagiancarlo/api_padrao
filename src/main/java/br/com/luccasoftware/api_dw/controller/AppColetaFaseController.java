@@ -146,4 +146,23 @@ public class AppColetaFaseController {
             throw new RuntimeException("Fase não encontrada");
         }
     }
+
+    @GetMapping("/coleta-fase/teste")
+    public String teste(
+            @RequestHeader(value = "Authorization") String authorizationHeader) {
+
+        // Validação do token JWT no cabeçalho
+        if (!authorizationHeader.startsWith("Bearer ")) {
+            throw new RuntimeException("Token inválido.");
+        }
+
+        // Verifica se a solicitação está autenticada
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new RuntimeException("Usuário não autenticado.");
+        }
+
+        // Retorna uma mensagem de sucesso se autenticado
+        return "Autenticação bem-sucedida! A API está funcionando corretamente.";
+    }
 }
