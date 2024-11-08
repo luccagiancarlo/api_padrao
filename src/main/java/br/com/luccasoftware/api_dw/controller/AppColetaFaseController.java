@@ -39,13 +39,30 @@ public class AppColetaFaseController {
         List<AppColetaFase> fases = new ArrayList<>();
         if (id != null) {
             if (id.equals("all")) {
-                fases = appColetaFaseRepository.findAll();
+                try {
+                    fases = appColetaFaseRepository.findAll();
+                } catch (Exception e) {
+                    AppColetaFase appColetaFase = new AppColetaFase();
+                    appColetaFase.setId(0);
+                    appColetaFase.setNome(e.getMessage());
+                    fases.add(appColetaFase);
+
+                }
+
             } else {
                 try {
                     Optional<AppColetaFase> fase = appColetaFaseRepository.findById(Integer.parseInt(id));
                     fase.ifPresent(fases::add);
                 } catch (Exception e) {
-                    fases = appColetaFaseRepository.findAll();
+                    try {
+                        fases = appColetaFaseRepository.findAll();
+                    } catch (Exception ex) {
+                        AppColetaFase appColetaFase = new AppColetaFase();
+                        appColetaFase.setId(0);
+                        appColetaFase.setNome(ex.getMessage());
+                        fases.add(appColetaFase);
+
+                    }
                 }
             }
         }
@@ -166,10 +183,6 @@ public class AppColetaFaseController {
         return "Autenticação bem-sucedida! A API está funcionando corretamente.";
     }
 
-    @GetMapping("/coleta-fase/teste2")
-    public String teste2() {
 
-        return "A API está funcionando corretamente.";
-    }
 
 }
