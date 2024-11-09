@@ -47,8 +47,6 @@ public class AuthenticationService {
     }
 
     public RetornoLogin authenticateApp(String email, String senha) {
-        // Aqui você pode carregar o hash da senha do banco de dados
-        String storedHash = usuarioRepository.findPasswordByEmail(email);
 
         RetornoLogin r = new RetornoLogin();
         r.setLt_login("");
@@ -80,7 +78,7 @@ public class AuthenticationService {
             }
 
         } else {
-
+            String storedHash = usuarioRepository.findPasswordByEmail(email);
             if (storedHash != null && passwordEncoder.matches(senha, storedHash)) {
                 UsuarioAdmin usu = new UsuarioAdmin();
                 usu = usuarioAdminRepository.buscarEmail(email);
