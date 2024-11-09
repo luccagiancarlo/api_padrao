@@ -6,6 +6,7 @@ import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -185,23 +186,73 @@ public class AppColetaFaseController {
             throw new RuntimeException("Usuário não autenticado.");
         }
 
+        String tk = autenticarLS();
+        return sendPost("https://luccasoftware.com.br/api/iaocp/fases", "{\n    \"tp_operacao\" : \"pesquisarAll\"\n}", tk);
+
+    }
+
+    @GetMapping("/docs/all")
+    public String docs_all(
+            @RequestHeader(value = "Authorization") String authorizationHeader) throws IOException {
+
+        // Validação do token JWT no cabeçalho
+        if (!authorizationHeader.startsWith("Bearer ")) {
+            throw new RuntimeException("Token inválido.");
+        }
+
+        // Verifica se a solicitação está autenticada
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new RuntimeException("Usuário não autenticado.");
+        }
+
+        String tk = autenticarLS();
+        return sendPost("https://luccasoftware.com.br/api/iaocp/docs", "{\n    \"tp_operacao\" : \"pesquisarAll\"\n}", tk);
+
+
+    }
+
+    private String autenticarLS() throws IOException {
+        String tk = "";
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         MediaType mediaType = MediaType.parse("application/json");
-        okhttp3.RequestBody body = okhttp3.RequestBody.create(mediaType, "{\n    \"tp_operacao\" : \"pesquisarAll\"\n}");
+        okhttp3.RequestBody body = okhttp3.RequestBody.create(mediaType, "{\n    \"cd_projeto\" : \"projeto123\",\n    \"lt_password\" : \"senha123\"\n}");
         Request request = new Request.Builder()
-                .url("https://luccasoftware.com.br/api/iaocp/fases")
+                .url("https://luccasoftware.com.br/api/auth")
                 .method("POST", body)
                 .addHeader("Content-Type", "application/json")
-                .addHeader("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjZF9wcm9qZXRvIjoicHJvamV0bzEyMyJ9.bvMTrQYM7z8PzL8S0mZsnIzP5eUMo0VDqg7yd5u2pcc")
+                .build();
+        Response response = client.newCall(request).execute();
+        String json = response.body().string();
+
+        // Parsing the JSON response to get the token
+        JSONObject jsonObject = new JSONObject(json);
+        if (jsonObject.has("token")) {
+            tk = jsonObject.getString("token");
+        }
+
+        return tk;
+
+    }
+
+    private String sendPost(String url, String json, String tk) throws IOException {
+
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
+        MediaType mediaType = MediaType.parse("application/json");
+        okhttp3.RequestBody body = okhttp3.RequestBody.create(mediaType, json);
+        Request request = new Request.Builder()
+                .url(url)
+                .method("POST", body)
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Authorization", "Bearer " + tk)
                 .build();
         Response response = client.newCall(request).execute();
 
-
         // Retorna uma mensagem de sucesso se autenticado
         return response.body().string();
+
     }
-
-
 
 }
