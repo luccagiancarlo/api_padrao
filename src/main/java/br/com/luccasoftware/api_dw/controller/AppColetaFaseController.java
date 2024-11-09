@@ -164,7 +164,7 @@ public class AppColetaFaseController {
         }
     }
 
-    @GetMapping("/coleta-fase/teste")
+    @GetMapping("/coleta-fase/teste3")
     public String teste(
             @RequestHeader(value = "Authorization") String authorizationHeader) {
 
