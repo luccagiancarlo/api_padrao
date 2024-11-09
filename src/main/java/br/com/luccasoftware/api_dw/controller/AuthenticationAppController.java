@@ -20,6 +20,12 @@ public class AuthenticationAppController {
     public RetornoLogin createToken(@RequestBody AuthenticationAppRequest authenticationRequest) {
         return authenticationService.authenticateApp(authenticationRequest.getEn_email(), authenticationRequest.getDe_senha());
     }
+
+    @PostMapping("/autenticar_app_dw")
+    public RetornoLogin createTokenDw(@RequestBody AuthenticationAppRequest authenticationRequest) {
+        return authenticationService.authenticateApp(authenticationRequest.getEn_email(), authenticationRequest.getDe_senha());
+    }
+
 }
 
 
