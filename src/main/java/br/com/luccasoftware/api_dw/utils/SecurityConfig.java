@@ -38,6 +38,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api_dw/v1/autenticar").permitAll()
                         .requestMatchers("/api_dw/v1/autenticar_app").permitAll()
+                        .requestMatchers("/api_dw/v1/autenticar_dw").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
