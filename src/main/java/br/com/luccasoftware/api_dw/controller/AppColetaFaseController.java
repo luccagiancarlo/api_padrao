@@ -2,11 +2,17 @@ package br.com.luccasoftware.api_dw.controller;
 
 import br.com.luccasoftware.api_dw.jpa.AppColetaFaseRepository;
 import br.com.luccasoftware.api_dw.jpa.AppColetaFase;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -164,9 +170,9 @@ public class AppColetaFaseController {
         }
     }
 
-    @GetMapping("/coleta-fase/teste3")
-    public String teste(
-            @RequestHeader(value = "Authorization") String authorizationHeader) {
+    @GetMapping("/fases/all")
+    public String fases_all(
+            @RequestHeader(value = "Authorization") String authorizationHeader) throws IOException {
 
         // Validação do token JWT no cabeçalho
         if (!authorizationHeader.startsWith("Bearer ")) {
@@ -179,8 +185,21 @@ public class AppColetaFaseController {
             throw new RuntimeException("Usuário não autenticado.");
         }
 
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
+        MediaType mediaType = MediaType.parse("application/json");
+        okhttp3.RequestBody body = okhttp3.RequestBody.create(mediaType, "{\n    \"tp_operacao\" : \"pesquisarAll\"\n}");
+        Request request = new Request.Builder()
+                .url("https://luccasoftware.com.br/api/iaocp/fases")
+                .method("POST", body)
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjZF9wcm9qZXRvIjoicHJvamV0bzEyMyJ9.bvMTrQYM7z8PzL8S0mZsnIzP5eUMo0VDqg7yd5u2pcc")
+                .build();
+        Response response = client.newCall(request).execute();
+
+
         // Retorna uma mensagem de sucesso se autenticado
-        return "Autenticação bem-sucedida! A API está funcionando corretamente.";
+        return response.body().string();
     }
 
 
