@@ -59,7 +59,7 @@ public class AuthenticationService {
         r.setFl_sede("N");
         r.setFl_transmitir("N");
 
-        if (email.equals("logistica@institutoaocp.org.br")) {
+        if (email.equals("admlog@institutoaocp.org.br")) {
             if (senha.equals("177900")) {
                 String token = jwtUtil.generateToken(email);
                 r.setLt_login("Logistica");
