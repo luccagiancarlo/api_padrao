@@ -27,7 +27,7 @@ public class AuthenticationService {
     public String authenticate(String email, String senha) {
         // Aqui você pode carregar o hash da senha do banco de dados
 
-        if (email.equals("logistica@institutoaocp.org.br")) {
+        if (email.equals("admlog@institutoaocp.org.br")) {
             if (senha.equals("177900")) {
                 return jwtUtil.generateToken(email);
             } else {
