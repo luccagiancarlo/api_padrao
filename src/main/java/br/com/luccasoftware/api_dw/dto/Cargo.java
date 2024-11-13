@@ -17,6 +17,7 @@ public class Cargo {
     private Integer tt_ins_afro;
     private Integer tt_ins_pcd;
     private Integer tt_ins_isentos;
+    private Double taxa;
 
 
     public String getPrefixo() {
@@ -129,6 +130,14 @@ public class Cargo {
 
     public void setTt_ins_isentos(Integer tt_ins_isentos) {
         this.tt_ins_isentos = tt_ins_isentos;
+    }
+
+    public Double getTaxa() {
+        return taxa;
+    }
+
+    public void setTaxa(Double taxa) {
+        this.taxa = taxa;
     }
 
 

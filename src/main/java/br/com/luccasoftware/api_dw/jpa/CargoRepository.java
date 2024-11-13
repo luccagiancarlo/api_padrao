@@ -21,11 +21,11 @@ public class CargoRepository {
     private DatabaseUtils databaseUtils;
 
     public List<Cargo> findAllCargos(String prefixo) {
-        String sql = "SELECT a.id, a.numero, a.nome, a.sigla, a.cidade, a.vagas, a.vagaspne, a.vagas_afro " +
+        String sql = "SELECT a.id, a.numero, a.nome, a.sigla, a.cidade, a.vagas, a.vagaspne, a.vagas_afro, a.taxa " +
                 "FROM " + prefixo + "_cargo a ORDER BY a.id";
 
         if (!databaseUtils.existeColuna(prefixo + "_cargo", "vagas_afro")) {
-            sql = "SELECT a.id, a.numero, a.nome, a.sigla, a.cidade, a.vagas, a.vagaspne, 0 as vagas_afro " +
+            sql = "SELECT a.id, a.numero, a.nome, a.sigla, a.cidade, a.vagas, a.vagaspne, 0 as vagas_afro, a.taxa " +
                     "FROM " + prefixo + "_cargo a ORDER BY a.id";
         }
 
@@ -44,6 +44,7 @@ public class CargoRepository {
             cargo.setVagas(row[5] != null ? Integer.parseInt(row[5].toString()) : 0);
             cargo.setVagaspne(row[6] != null ? Integer.parseInt(row[6].toString()) : 0);
             cargo.setVagasAfro(row[7] != null ? Integer.parseInt(row[7].toString()) : 0);
+            cargo.setTaxa(row[8] != null ? Double.parseDouble(row[8].toString()) : 0);
 
             cargos.add(cargo);
         }
@@ -60,11 +61,11 @@ public class CargoRepository {
         for (Object prefixo : prefixos) {
             try {
                 String prefixoStr = prefixo.toString();
-                String sql = "SELECT a.id, a.numero, a.nome, a.sigla, a.cidade, a.vagas, a.vagaspne, a.vagas_afro " +
+                String sql = "SELECT a.id, a.numero, a.nome, a.sigla, a.cidade, a.vagas, a.vagaspne, a.vagas_afro, a.taxa " +
                         "FROM " + prefixoStr + "_cargo a ORDER BY a.id";
 
                 if (!databaseUtils.existeColuna(prefixoStr + "_cargo", "vagas_afro")) {
-                    sql = "SELECT a.id, a.numero, a.nome, a.sigla, a.cidade, a.vagas, a.vagaspne, 0 as vagas_afro " +
+                    sql = "SELECT a.id, a.numero, a.nome, a.sigla, a.cidade, a.vagas, a.vagaspne, 0 as vagas_afro, a.taxa " +
                             "FROM " + prefixoStr + "_cargo a ORDER BY a.id";
                 }
 
@@ -82,6 +83,8 @@ public class CargoRepository {
                     cargo.setVagas(row[5] != null ? Integer.parseInt(row[5].toString()) : 0);
                     cargo.setVagaspne(row[6] != null ? Integer.parseInt(row[6].toString()) : 0);
                     cargo.setVagasAfro(row[7] != null ? Integer.parseInt(row[7].toString()) : 0);
+                    cargo.setTaxa(row[8] != null ? Double.parseDouble(row[8].toString()) : 0);
+
                     int tt_ins = qde_inscritos(prefixoStr, row[0].toString());
                     int tt_ins_homol = qde_inscritos_homol(prefixoStr, row[0].toString());
                     int tt_afro = qde_inscritos_afro(prefixoStr, row[0].toString());
