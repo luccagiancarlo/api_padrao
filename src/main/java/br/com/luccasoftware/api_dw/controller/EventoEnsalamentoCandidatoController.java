@@ -43,7 +43,8 @@ public class EventoEnsalamentoCandidatoController {
                 if (!id_local.equals("")) {
                     can = eventoEnsalamentoRepository.findAll(id_evento, id_local);
                 } else {
-                    can = eventoEnsalamentoRepository.buscarTodosCandidatos(id_evento);
+                    can = eventoEnsalamentoRepository.findAll(id_evento, "0");
+                    //can = eventoEnsalamentoRepository.buscarTodosCandidatos(id_evento);
                 }
 
         }

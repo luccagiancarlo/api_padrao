@@ -132,7 +132,7 @@ public class EventoEnsalamentoRepository {
                  vsql = "select a.id_evento, a.descricao, b.inscricao, c.cargo, c.numero, c.cpf, trim(c.nome) as nome,  b.nome_cargo, b.periodo, b.id_local, d.escola, d.cidade\n" +
                         " from ensalamento a, ensalamento_candidato b, " + prefixo + "_candidato c, " + prefixo + "_local d\n" +
                         " where a.id = b.id_ensalamento and b.cpf = c.cpf and b.id_cargo = c.cargo and b.id_local = d.id\n" +
-                        " and a.id_evento=" + id_evento + " and b.id_local=" + idLocal +
+                        " and a.id_evento=" + id_evento +
                         " order by trim(c.nome)";
 
                 //System.out.println(vsql);
