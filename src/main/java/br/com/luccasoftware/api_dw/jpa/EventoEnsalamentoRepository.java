@@ -76,9 +76,15 @@ public class EventoEnsalamentoRepository {
 
     }
 
-    public List<EventoEnsalamentoCandidato> findAll(long id_evento, long id_local) {
+    public List<EventoEnsalamentoCandidato> findAll(long id_evento, String id_local) {
         List<EventoEnsalamentoCandidato> can = new ArrayList<>();
 
+        String[] partes = id_local.split("-");
+
+        String prefixo = partes[0];
+        String idLocal = partes[1];
+
+        /*
         String vsql = "select a.id, a.descricao from ensalamento a where a.id_evento=" + id_evento;
         Query qConcurso = entityManager.createNativeQuery(vsql);
 
@@ -88,11 +94,13 @@ public class EventoEnsalamentoRepository {
             prefixo = o[1].toString() ;
         }
 
+         */
 
-        vsql = "select a.id_evento, a.descricao, b.inscricao, c.cargo, c.numero, c.cpf, trim(c.nome) as nome,  b.nome_cargo, b.periodo, b.id_local, d.escola, d.cidade\n" +
+
+        String vsql = "select a.id_evento, a.descricao, b.inscricao, c.cargo, c.numero, c.cpf, trim(c.nome) as nome,  b.nome_cargo, b.periodo, b.id_local, d.escola, d.cidade\n" +
                 " from ensalamento a, ensalamento_candidato b, "+prefixo+"_candidato c, "+prefixo+"_local d\n" +
                 " where a.id = b.id_ensalamento and b.cpf = c.cpf and b.id_cargo = c.cargo and b.id_local = d.id\n" +
-                " and a.id_evento="+id_evento+" and b.id_local=" + id_local +
+                " and a.id_evento="+id_evento+" and b.id_local=" + idLocal +
                 " order by trim(c.nome)" ;
 
         //System.out.println(vsql);

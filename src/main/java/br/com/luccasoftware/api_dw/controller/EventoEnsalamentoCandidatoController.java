@@ -24,7 +24,7 @@ public class EventoEnsalamentoCandidatoController {
     public List<EventoEnsalamentoCandidato> retornarEventoEnsalamentoCandidatos(
             @RequestHeader(value = "Authorization") String authorizationHeader,
             @PathVariable long id_evento,
-            @RequestParam(defaultValue = "0") long id_local) {
+            @RequestParam(defaultValue = "0") String id_local) {
 
         // Valida se o Authorization header está presente e começa com "Bearer "
         if (!authorizationHeader.startsWith("Bearer ")) {
@@ -40,7 +40,7 @@ public class EventoEnsalamentoCandidatoController {
         // Retorna a lista de cargos com o prefixo especificado
         List<EventoEnsalamentoCandidato> can = new ArrayList<>();
         if (id_evento > 0) {
-                if (id_local > 0) {
+                if (!id_local.equals("")) {
                     can = eventoEnsalamentoRepository.findAll(id_evento, id_local);
                 } else {
                     can = eventoEnsalamentoRepository.buscarTodosCandidatos(id_evento);
