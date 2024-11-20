@@ -5,6 +5,7 @@ public class EventoEnsalamentoLocal {
     private long id_local;
     private String escola;
     private String cidade;
+    private String edital;
 
 
     public long getId_local() {
@@ -29,5 +30,13 @@ public class EventoEnsalamentoLocal {
 
     public void setCidade(String cidade) {
         this.cidade = cidade;
+    }
+
+    public String getEdital() {
+        return edital;
+    }
+
+    public void setEdital(String edital) {
+        this.edital = edital;
     }
 }

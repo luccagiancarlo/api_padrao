@@ -199,6 +199,7 @@ public class EventoEnsalamentoRepository {
                 ent.setId_local(row[0] != null ? Long.parseLong(row[0].toString()) : 0L);
                 ent.setCidade(row[1] != null ? row[1].toString() : "");
                 ent.setEscola(row[2] != null ? row[2].toString() : "");
+                ent.setEdital(prefixo);
 
 
                 locals.add(ent);
