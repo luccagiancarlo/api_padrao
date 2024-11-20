@@ -175,34 +175,34 @@ public class EventoEnsalamentoRepository {
     public List<EventoEnsalamentoLocal> findAll(long id_evento) {
         List<EventoEnsalamentoLocal> locals = new ArrayList<>();
 
-        String vsql = "select a.id, a.descricao from ensalamento a where a.id_evento=" + id_evento;
+        String vsql = "select distinct b.edital from ensalamento a inner join ensalamento_candidato b on (a.id = b.id_ensalamento) where a.id_evento=" + id_evento;
         Query qConcurso = entityManager.createNativeQuery(vsql);
 
-        List<Object[]> l = qConcurso.getResultList();
+        List<Object> l = qConcurso.getResultList();
         String prefixo = "";
-        for (Object[] o : l) {
-            prefixo = o[1].toString() ;
-        }
+        for (Object o : l) {
+            prefixo = o.toString();
 
 
-        vsql = "select distinct b.id_local, d.cidade, d.escola\n" +
-                " from ensalamento a, ensalamento_candidato b, "+prefixo+"_candidato c, "+prefixo+"_local d\n" +
-                " where a.id = b.id_ensalamento and b.cpf = c.cpf and b.id_cargo = c.cargo and b.id_local = d.id\n" +
-                " and a.id_evento=" + id_evento +
-                " order by d.cidade, d.escola " ;
+            vsql = "select distinct b.id_local, d.cidade, d.escola\n" +
+                    " from ensalamento a, ensalamento_candidato b, " + prefixo + "_candidato c, " + prefixo + "_local d\n" +
+                    " where a.id = b.id_ensalamento and b.cpf = c.cpf and b.id_cargo = c.cargo and b.id_local = d.id\n" +
+                    " and a.id_evento=" + id_evento +
+                    " order by d.cidade, d.escola ";
 
-        //System.out.println(vsql);
+            //System.out.println(vsql);
 
-        Query q = entityManager.createNativeQuery(vsql);
-        List<Object[]> resultList = q.getResultList();
-        for (Object[] row : resultList) {
-            EventoEnsalamentoLocal ent = new EventoEnsalamentoLocal();
-            ent.setId_local(row[0] != null ? Long.parseLong(row[0].toString()) : 0L);
-            ent.setCidade(row[1] != null ? row[1].toString() : "");
-            ent.setEscola(row[2] != null ? row[2].toString() : "");
+            Query q = entityManager.createNativeQuery(vsql);
+            List<Object[]> resultList = q.getResultList();
+            for (Object[] row : resultList) {
+                EventoEnsalamentoLocal ent = new EventoEnsalamentoLocal();
+                ent.setId_local(row[0] != null ? Long.parseLong(row[0].toString()) : 0L);
+                ent.setCidade(row[1] != null ? row[1].toString() : "");
+                ent.setEscola(row[2] != null ? row[2].toString() : "");
 
 
-            locals.add(ent);
+                locals.add(ent);
+            }
         }
 
         return locals;
