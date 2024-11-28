@@ -105,13 +105,17 @@ public class AppColetaFaseController {
 
         // Validação do token JWT no cabeçalho
         if (!authorizationHeader.startsWith("Bearer ")) {
-            throw new RuntimeException("Token inválido.");
+            AppColetaFase appColetaFase = new AppColetaFase();
+            appColetaFase.setId(0);
+            appColetaFase.setNome("Token inválido!");
         }
 
         // Verifica se a solicitação está autenticada
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated()) {
-            throw new RuntimeException("Usuário não autenticado.");
+            AppColetaFase appColetaFase = new AppColetaFase();
+            appColetaFase.setId(0);
+            appColetaFase.setNome("Usuário não autenticado!");
         }
 
         // Salva a nova fase no banco de dados
