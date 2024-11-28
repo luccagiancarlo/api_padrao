@@ -115,7 +115,15 @@ public class AppColetaFaseController {
         }
 
         // Salva a nova fase no banco de dados
-        return appColetaFaseRepository.save(novaFase);
+        try {
+            novaFase = appColetaFaseRepository.save(novaFase);
+        } catch (Exception e) {
+            AppColetaFase appColetaFase = new AppColetaFase();
+            appColetaFase.setId(0);
+            appColetaFase.setNome(e.getMessage());
+        }
+
+        return novaFase;
     }
 
     // Método para atualizar uma fase existente
