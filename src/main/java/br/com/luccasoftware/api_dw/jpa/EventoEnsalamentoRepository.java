@@ -222,31 +222,123 @@ public class EventoEnsalamentoRepository {
         Query qConcurso = entityManager.createNativeQuery(vsql);
 
         List<Object> l = qConcurso.getResultList();
-        String prefixo = "";
-        for (Object o : l) {
-            prefixo = o.toString();
+
+        if (l.size() > 0) {
+            String prefixo = "";
+            for (Object o : l) {
+                prefixo = o.toString();
 
 
-            vsql = "select distinct b.id_local, d.cidade, d.escola\n" +
-                    " from ensalamento a, ensalamento_candidato b, " + prefixo + "_candidato c, " + prefixo + "_local d\n" +
-                    " where a.id = b.id_ensalamento and b.cpf = c.cpf and b.id_cargo = c.cargo and b.id_local = d.id\n" +
-                    " and a.id_evento=" + id_evento +
-                    " order by d.cidade, d.escola ";
+                vsql = "select distinct b.id_local, d.cidade, d.escola\n" +
+                        " from ensalamento a, ensalamento_candidato b, " + prefixo + "_candidato c, " + prefixo + "_local d\n" +
+                        " where a.id = b.id_ensalamento and b.cpf = c.cpf and b.id_cargo = c.cargo and b.id_local = d.id\n" +
+                        " and a.id_evento=" + id_evento +
+                        " order by d.cidade, d.escola ";
 
-            //System.out.println(vsql);
+                //System.out.println(vsql);
+
+                Query q = entityManager.createNativeQuery(vsql);
+                List<Object[]> resultList = q.getResultList();
+                for (Object[] row : resultList) {
+                    EventoEnsalamentoLocal ent = new EventoEnsalamentoLocal();
+                    ent.setId_local(row[0] != null ? Long.parseLong(row[0].toString()) : 0L);
+                    ent.setCidade(row[1] != null ? row[1].toString() : "");
+                    ent.setEscola(row[2] != null ? row[2].toString() : "");
+                    ent.setEdital(prefixo);
+
+
+                    locals.add(ent);
+                }
+            }
+        } else {
+
+            vsql = "select trim(both '{}' from concurso[1]) as concurso from convocacao_negros a where a.id=" + id_evento;
+            qConcurso = entityManager.createNativeQuery(vsql);
+            String concurso = (String) qConcurso.getSingleResult();
+
+            vsql = "SELECT distinct cidade, local FROM (\n" +
+                    "SELECT c.nome,\n" +
+                    "c.cpf,\n" +
+                    "  CASE WHEN c.dados_inscricao [1] = '"+concurso+"'\n" +
+                    "    THEN c.dados_inscricao [3] || ' / ' ELSE '' END ||\n" +
+                    "  CASE WHEN c.dados_inscricao [4] = '"+concurso+"'\n" +
+                    "    THEN c.dados_inscricao [6] || ' / ' ELSE '' END ||\n" +
+                    "  CASE WHEN c.dados_inscricao [7] =  '"+concurso+"'\n" +
+                    "    THEN c.dados_inscricao [9] || ' / ' ELSE '' END ||\n" +
+                    "  CASE WHEN c.dados_inscricao [10] =  '"+concurso+"'\n" +
+                    "    THEN c.dados_inscricao [12] || ' / ' ELSE '' END AS cargos,\n" +
+                    "\n" +
+                    "  CASE WHEN c.dados_inscricao [1] =  '"+concurso+"'\n" +
+                    "    THEN c.dados_inscricao [2] || ' / ' ELSE '' END ||\n" +
+                    "  CASE WHEN c.dados_inscricao [4] =  '"+concurso+"'\n" +
+                    "    THEN c.dados_inscricao [5] || ' / ' ELSE '' END ||\n" +
+                    "  CASE WHEN c.dados_inscricao [7] =  '"+concurso+"'\n" +
+                    "    THEN c.dados_inscricao [8] || ' / ' ELSE '' END ||\n" +
+                    "  CASE WHEN c.dados_inscricao [10] =  '"+concurso+"'\n" +
+                    "    THEN c.dados_inscricao [11] || ' / ' ELSE '' END AS inscricoes,\n" +
+                    "\n" +
+                    "  cd.cidade,\n" +
+                    "  l.nome AS local,\n" +
+                    "  s.sala,\n" +
+                    "  to_char(d.data_hora, 'dd/MM/yyyy HH24:mi') AS data_formatada\n" +
+                    "FROM convocacao_negros_candidato c\n" +
+                    "  INNER JOIN convocacao_negros_sala_data sd ON sd.id = c.id_sala_horario\n" +
+                    "  INNER JOIN convocacao_negros_data d ON d.id = sd.id_data\n" +
+                    "  INNER JOIN convocacao_negros_sala s ON s.id = sd.id_sala\n" +
+                    "  INNER JOIN convocacao_negros_local l ON l.id = s.id_local\n" +
+                    "  INNER JOIN convocacao_negros_cidade cd ON cd.id = l.id_cidade\n" +
+                    "WHERE c.id_convocacao = 11678 AND c.dados_inscricao @> ARRAY ['"+concurso+"'] :: VARCHAR []\n" +
+                    "ORDER BY cd.cidade, l.nome, c.sexo DESC, c.nome) as foo";
 
             Query q = entityManager.createNativeQuery(vsql);
             List<Object[]> resultList = q.getResultList();
+            long i = 1;
             for (Object[] row : resultList) {
-                EventoEnsalamentoLocal ent = new EventoEnsalamentoLocal();
-                ent.setId_local(row[0] != null ? Long.parseLong(row[0].toString()) : 0L);
-                ent.setCidade(row[1] != null ? row[1].toString() : "");
-                ent.setEscola(row[2] != null ? row[2].toString() : "");
-                ent.setEdital(prefixo);
 
+                EventoEnsalamentoLocal ent = new EventoEnsalamentoLocal();
+                ent.setId_local(i);
+                ent.setCidade(row[0] != null ? row[0].toString() : "");
+                ent.setEscola(row[1] != null ? row[1].toString() : "");
+                ent.setEdital(concurso);
 
                 locals.add(ent);
             }
+
+
+            vsql = "SELECT substring(cargos,1,length(cargos)-2) as cargos, substring(inscricoes,1,length(inscricoes)-2) as inscricoes, nome,cpf, cidade, local, sala, data_formatada FROM (\n" +
+                    "SELECT c.nome,\n" +
+                    "c.cpf,\n" +
+                    "  CASE WHEN c.dados_inscricao [1] = '"+concurso+"'\n" +
+                    "    THEN c.dados_inscricao [3] || ' / ' ELSE '' END ||\n" +
+                    "  CASE WHEN c.dados_inscricao [4] = '"+concurso+"'\n" +
+                    "    THEN c.dados_inscricao [6] || ' / ' ELSE '' END ||\n" +
+                    "  CASE WHEN c.dados_inscricao [7] =  '"+concurso+"'\n" +
+                    "    THEN c.dados_inscricao [9] || ' / ' ELSE '' END ||\n" +
+                    "  CASE WHEN c.dados_inscricao [10] =  '"+concurso+"'\n" +
+                    "    THEN c.dados_inscricao [12] || ' / ' ELSE '' END AS cargos,\n" +
+                    "\n" +
+                    "  CASE WHEN c.dados_inscricao [1] =  '"+concurso+"'\n" +
+                    "    THEN c.dados_inscricao [2] || ' / ' ELSE '' END ||\n" +
+                    "  CASE WHEN c.dados_inscricao [4] =  '"+concurso+"'\n" +
+                    "    THEN c.dados_inscricao [5] || ' / ' ELSE '' END ||\n" +
+                    "  CASE WHEN c.dados_inscricao [7] =  '"+concurso+"'\n" +
+                    "    THEN c.dados_inscricao [8] || ' / ' ELSE '' END ||\n" +
+                    "  CASE WHEN c.dados_inscricao [10] =  '"+concurso+"'\n" +
+                    "    THEN c.dados_inscricao [11] || ' / ' ELSE '' END AS inscricoes,\n" +
+                    "\n" +
+                    "  cd.cidade,\n" +
+                    "  l.nome AS local,\n" +
+                    "  s.sala,\n" +
+                    "  to_char(d.data_hora, 'dd/MM/yyyy HH24:mi') AS data_formatada\n" +
+                    "FROM convocacao_negros_candidato c\n" +
+                    "  INNER JOIN convocacao_negros_sala_data sd ON sd.id = c.id_sala_horario\n" +
+                    "  INNER JOIN convocacao_negros_data d ON d.id = sd.id_data\n" +
+                    "  INNER JOIN convocacao_negros_sala s ON s.id = sd.id_sala\n" +
+                    "  INNER JOIN convocacao_negros_local l ON l.id = s.id_local\n" +
+                    "  INNER JOIN convocacao_negros_cidade cd ON cd.id = l.id_cidade\n" +
+                    "WHERE c.id_convocacao = 11678 AND c.dados_inscricao @> ARRAY ['"+concurso+"'] :: VARCHAR []\n" +
+                    "ORDER BY cd.cidade, l.nome, c.sexo DESC, c.nome) as foo";
+
         }
 
         return locals;
