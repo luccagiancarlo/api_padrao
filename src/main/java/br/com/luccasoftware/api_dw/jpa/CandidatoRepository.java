@@ -222,7 +222,7 @@ public class CandidatoRepository {
             try {
                 String prefixoStr = prefixo[1].toString();
                 String sql = "SELECT count(a.numero) " +
-                        "FROM " + prefixoStr + "_candidato a gru";
+                        "FROM " + prefixoStr + "_candidato a";
 
                 Query query = entityManager.createNativeQuery(sql);
                 List<Object> resultList = query.getResultList();
