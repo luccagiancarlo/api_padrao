@@ -183,6 +183,66 @@ public class CandidatoRepository {
         return candidatos;
     }
 
+    public long candidatosInscritos(int id_concurso) {
+        long r = 0;
+        String sqlConcursos = "SELECT a.nome FROM concurso a where id="+id_concurso;
+        Query queryConcursos = entityManager.createNativeQuery(sqlConcursos);
+        List<Object> prefixos = queryConcursos.getResultList();
+
+        for (Object prefixo : prefixos) {
+            try {
+                String prefixoStr = prefixo.toString();
+                String sql = "SELECT count(a.numero) " +
+                        "FROM " + prefixoStr + "_candidato a";
+
+                Query query = entityManager.createNativeQuery(sql);
+                List<Object> resultList = query.getResultList();
+
+                for (Object row : resultList) {
+                    r = row != null ? Long.parseLong(row.toString()) : 0L;
+
+
+                }
+            } catch (Exception e) {
+                System.out.println("Erro: " + e.getMessage());
+            }
+        }
+
+        return r;
+    }
+
+
+    public List<Object[]> qdeInscritos() {
+        List<Object[]> r = new ArrayList<>();
+        String sqlConcursos = "SELECT a.id, a.nome FROM concurso a  ORDER BY a.id";
+        Query queryConcursos = entityManager.createNativeQuery(sqlConcursos);
+        List<Object[]> prefixos = queryConcursos.getResultList();
+
+        for (Object[] prefixo : prefixos) {
+            try {
+                String prefixoStr = prefixo[1].toString();
+                String sql = "SELECT count(a.numero) " +
+                        "FROM " + prefixoStr + "_candidato a gru";
+
+                Query query = entityManager.createNativeQuery(sql);
+                List<Object> resultList = query.getResultList();
+
+                for (Object row : resultList) {
+                    long qde = row != null ? Long.parseLong(row.toString()) : 0L;
+                    Object[] o = new Object[2];
+                    o[0] = prefixo[0].toString();
+                    o[1] = qde;
+                    r.add(o);
+
+                }
+            } catch (Exception e) {
+                System.out.println("Erro: " + e.getMessage());
+            }
+        }
+
+        return r;
+    }
+
 
 }
 

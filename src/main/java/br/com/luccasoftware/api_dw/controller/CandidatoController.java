@@ -71,4 +71,54 @@ public class CandidatoController {
         return candidatos;
     }
 
+
+    @GetMapping("/candidatosInscritos/{id_concurso}")
+    public long candidatosInscritos(
+            @RequestHeader(value = "Authorization") String authorizationHeader,
+            @PathVariable int id_concurso) {
+
+        // Valida se o Authorization header está presente e começa com "Bearer "
+        if (!authorizationHeader.startsWith("Bearer ")) {
+            throw new RuntimeException("Token inválido.");
+        }
+
+        // O filtro JWT deve garantir que a solicitação está autenticada
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new RuntimeException("Usuário não autenticado.");
+        }
+
+        long qde = 0;
+        if (id_concurso > 0) {
+            qde = candidatoRepository.candidatosInscritos(id_concurso);
+        }
+
+        return qde;
+
+    }
+
+    @GetMapping("/qdeInscritos")
+    public List<Object[]> qdeInscritos(
+            @RequestHeader(value = "Authorization") String authorizationHeader) {
+
+        // Valida se o Authorization header está presente e começa com "Bearer "
+        if (!authorizationHeader.startsWith("Bearer ")) {
+            throw new RuntimeException("Token inválido.");
+        }
+
+        // O filtro JWT deve garantir que a solicitação está autenticada
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new RuntimeException("Usuário não autenticado.");
+        }
+
+        List<Object[]> r = new ArrayList<>();
+
+        r = candidatoRepository.qdeInscritos();
+
+
+        return r;
+
+    }
+
 }
