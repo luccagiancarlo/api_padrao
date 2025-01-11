@@ -35,7 +35,7 @@ public class ComercialRepository {
                 /* 08  */ " a.estado " +
                 " from contratante a, concurso b " +
                 " where a.id = b.\"idContratante\"" +
-                " and EXTRACT(YEAR FROM a.\"dataInicioInscricao\") between "+inicio+" and "+fim+" ORDER BY b.id";
+                " and EXTRACT(YEAR FROM b.\"dataInicioInscricao\") between "+inicio+" and "+fim+" ORDER BY b.id";
 
         Query queryConcursos = entityManager.createNativeQuery(sqlConcursos);
         List<Object[]> concursos = queryConcursos.getResultList();

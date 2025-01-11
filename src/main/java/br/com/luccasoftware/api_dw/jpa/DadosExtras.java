@@ -6,11 +6,13 @@ import java.util.List;
 public class DadosExtras {
 
     public  String buscarDados(List<Object[]> dados, int id, int posicao) {
-        for (Object[] registro : dados) {
-            if ((int) registro[0] == id) {
-                return registro[posicao].toString();
+        try {
+            for (Object[] registro : dados) {
+                if ((int) registro[0] == id) {
+                    return registro[posicao].toString();
+                }
             }
-        }
+        } catch (Exception e) {}
         return ""; // Retorna null caso o ID não seja encontrado
     }
 
