@@ -47,25 +47,33 @@ public class ComercialRepository {
         for (Object[] row : concursos) {
 
             Comercial com = new Comercial();
-            com.setPrefixo(row[0].toString());
-            com.setId_concurso(row[1] != null ? Long.parseLong(row[1].toString()) : 0L);
-            com.setOrganizadora(row[2] != null ? row[2].toString() : "");
-            com.setSigla(row[3] != null ? row[3].toString() : "");
-            com.setOrgao(row[4] != null ? row[4].toString() : "");
-            com.setStatus(row[5] != null ? row[5].toString() : "");
-            com.setAno_inicio_ins(row[6] != null ? Integer.parseInt(row[6].toString()) : 0);
-            com.setAno_inicio_po(row[6] != null ? Integer.parseInt(row[6].toString()) : 0);
-            com.setCidade(row[7] != null ? row[7].toString() : "");
-            com.setEstado(row[8] != null ? row[8].toString() : "");
-            com.setEsfera(extras.buscarDados(dados,Integer.parseInt(row[1].toString()),1));
-            com.setTipo_concurso(extras.buscarDados(dados,Integer.parseInt(row[1].toString()),2));
-            com.setArea_concurso(extras.buscarDados(dados,Integer.parseInt(row[1].toString()),3));
-            com.setTt_ins(qde_inscritos(com.getPrefixo()));
-            com.setTt_ins_homologados(qde_inscritos_homol(com.getPrefixo()));
-            com.setTt_vagas(qde_vagas(com.getPrefixo()));
-            com.setTt_cargos(qde_cargos(com.getPrefixo()));
-            com.setTt_cidades_aplicacao(qde_cidade_provas(com.getPrefixo()));
-            com.setTt_escolas_utilizadas(qde_escolas(com.getPrefixo()));
+            try {
+                com.setPrefixo(row[0].toString());
+                com.setId_concurso(row[1] != null ? Long.parseLong(row[1].toString()) : 0L);
+                com.setOrganizadora(row[2] != null ? row[2].toString() : "");
+                com.setSigla(row[3] != null ? row[3].toString() : "");
+                com.setOrgao(row[4] != null ? row[4].toString() : "");
+                com.setStatus(row[5] != null ? row[5].toString() : "");
+                com.setAno_inicio_ins(row[6] != null ? Integer.parseInt(row[6].toString()) : 0);
+                com.setAno_inicio_po(row[6] != null ? Integer.parseInt(row[6].toString()) : 0);
+                com.setCidade(row[7] != null ? row[7].toString() : "");
+                com.setEstado(row[8] != null ? row[8].toString() : "");
+                com.setEsfera(extras.buscarDados(dados, Integer.parseInt(row[1].toString()), 1));
+                com.setTipo_concurso(extras.buscarDados(dados, Integer.parseInt(row[1].toString()), 2));
+                com.setArea_concurso(extras.buscarDados(dados, Integer.parseInt(row[1].toString()), 3));
+                com.setTt_ins(qde_inscritos(com.getPrefixo()));
+                com.setTt_ins_homologados(qde_inscritos_homol(com.getPrefixo()));
+                com.setTt_vagas(qde_vagas(com.getPrefixo()));
+                com.setTt_cargos(qde_cargos(com.getPrefixo()));
+                com.setTt_cidades_aplicacao(qde_cidade_provas(com.getPrefixo()));
+                com.setTt_escolas_utilizadas(qde_escolas(com.getPrefixo()));
+            } catch (Exception e) {
+                com.setPrefixo("ERRO");
+                com.setOrganizadora(e.getMessage());
+
+            }
+
+
 
 
             listaComercial.add(com);
