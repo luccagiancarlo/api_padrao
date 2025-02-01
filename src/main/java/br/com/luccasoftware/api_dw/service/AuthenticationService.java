@@ -93,7 +93,7 @@ public class AuthenticationService {
             JSONObject jsonResponse = new JSONObject(response.toString());
 
             if (jsonResponse.has("token")) {
-                return jsonResponse.getString("token"); // Retorna o token em caso de sucesso
+                return jsonResponse.getString("cd_setor"); // Retorna o token em caso de sucesso
             } else if (jsonResponse.has("error")) {
                 return "Erro: " + jsonResponse.getString("error"); // Retorna a mensagem de erro
             }

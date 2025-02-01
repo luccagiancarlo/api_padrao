@@ -11,6 +11,7 @@ public class RetornoLogin {
     private String fl_sede;
     private String fl_coletar;
     private String fl_transmitir;
+    private String cd_evento;
 
 
     public String getLt_login() {
@@ -83,5 +84,13 @@ public class RetornoLogin {
 
     public void setFl_transmitir(String fl_transmitir) {
         this.fl_transmitir = fl_transmitir;
+    }
+
+    public String getCd_evento() {
+        return cd_evento;
+    }
+
+    public void setCd_evento(String cd_evento) {
+        this.cd_evento = cd_evento;
     }
 }
