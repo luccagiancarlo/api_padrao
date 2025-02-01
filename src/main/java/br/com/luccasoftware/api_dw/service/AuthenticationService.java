@@ -116,6 +116,7 @@ public class AuthenticationService {
         r.setFl_coletar("N");
         r.setFl_sede("N");
         r.setFl_transmitir("N");
+        r.setCd_evento("0");
 
         if (email.equals("admlog@institutoaocp.org.br")) {
             if (senha.equals("177900")) {
@@ -129,6 +130,7 @@ public class AuthenticationService {
                 r.setFl_coletar("S");
                 r.setFl_sede("S");
                 r.setFl_transmitir("S");
+                r.setCd_evento("0");
 
                 return r;
             } else {
@@ -137,7 +139,7 @@ public class AuthenticationService {
 
         } else {
 
-            String tk = authenticateLucca(email, senha);
+            String cd_evento = authenticateLucca(email, senha);
             //if (tk.contains("token")) {
 
                 String token = jwtUtil.generateToken(email);
@@ -151,6 +153,7 @@ public class AuthenticationService {
                 r.setFl_coletar("S");
                 r.setFl_sede("S");
                 r.setFl_transmitir("S");
+                r.setCd_evento(cd_evento);
 
                 return r;
 
