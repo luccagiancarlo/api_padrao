@@ -141,8 +141,8 @@ public class AuthenticationService {
             //if (tk.contains("token")) {
 
                 String token = jwtUtil.generateToken(email);
-                r.setLt_login(tk);
-                //r.setLt_login("Logistica");
+                //r.setLt_login(tk);
+                r.setLt_login("Logistica");
                 r.setEn_email(email);
                 r.setNm_pessoa("Logistica");
                 r.setDe_mensagem("OK");
