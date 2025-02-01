@@ -138,10 +138,11 @@ public class AuthenticationService {
         } else {
 
             String tk = authenticateLucca(email, senha);
-            if (tk.contains("token")) {
+            //if (tk.contains("token")) {
 
                 String token = jwtUtil.generateToken(email);
-                r.setLt_login("Logistica");
+                r.setLt_login(tk);
+                //r.setLt_login("Logistica");
                 r.setEn_email(email);
                 r.setNm_pessoa("Logistica");
                 r.setDe_mensagem("OK");
@@ -153,9 +154,9 @@ public class AuthenticationService {
 
                 return r;
 
-            } else {
-                return r;
-            }
+            //} else {
+            //    return r;
+            //}
 
             /*
             String storedHash = usuarioRepository.findPasswordByEmail(email);
