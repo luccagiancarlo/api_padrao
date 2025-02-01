@@ -140,7 +140,7 @@ public class AuthenticationService {
         } else {
 
             String cd_evento = authenticateLucca(email, senha);
-            //if (tk.contains("token")) {
+            if (!cd_evento.contains("Erro")) {
 
                 String token = jwtUtil.generateToken(email);
                 //r.setLt_login(tk);
@@ -157,9 +157,9 @@ public class AuthenticationService {
 
                 return r;
 
-            //} else {
-            //    return r;
-            //}
+            } else {
+                return r;
+            }
 
             /*
             String storedHash = usuarioRepository.findPasswordByEmail(email);
