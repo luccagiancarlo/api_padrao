@@ -298,7 +298,7 @@ public class EventoEnsalamentoRepository {
                         " and a.id_evento=" + id_evento +
                         " order by d.cidade, d.escola ";
 
-                //System.out.println(vsql);
+                System.out.println(vsql);
 
                 Query q = entityManager.createNativeQuery(vsql);
                 List<Object[]> resultList = q.getResultList();
@@ -353,7 +353,7 @@ public class EventoEnsalamentoRepository {
                     "WHERE c.id_convocacao = "+id_evento+" AND c.dados_inscricao @> ARRAY ['"+concurso+"'] :: VARCHAR []\n" +
                     "ORDER BY cd.cidade, l.nome, c.sexo DESC, c.nome) as foo";
 
-
+            System.out.println(vsql);
 
             Query q = entityManager.createNativeQuery(vsql);
             List<Object[]> resultList = q.getResultList();
@@ -365,6 +365,8 @@ public class EventoEnsalamentoRepository {
                 ent.setCidade(row[0] != null ? row[0].toString() : "");
                 ent.setEscola(row[1] != null ? row[1].toString() : "");
                 ent.setEdital(concurso);
+
+                i++;
 
                 locals.add(ent);
             }
