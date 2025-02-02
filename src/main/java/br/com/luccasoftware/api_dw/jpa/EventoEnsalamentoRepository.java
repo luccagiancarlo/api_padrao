@@ -165,8 +165,8 @@ public class EventoEnsalamentoRepository {
         }
 
         if (can.size() == 0) {
-            String vsql = "SELECT substring(cargos,1,length(cargos)-2) as cargos, substring(inscricoes,1,length(inscricoes)-2) as inscricoes, nome,cpf, cidade, local, sala, data_formatada FROM (\n" +
-                    "SELECT c.nome,\n" +
+            String vsql = "SELECT substring(cargos,1,length(cargos)-2) as cargos, substring(inscricoes,1,length(inscricoes)-2) as inscricoes, nome,cpf, cidade, local, sala, data_formatada, id FROM (\n" +
+                    "SELECT c.nome, l.id, \n" +
                     "c.cpf,\n" +
                     "  CASE WHEN c.dados_inscricao [1] = '"+prefixo+"'\n" +
                     "    THEN c.dados_inscricao [3] || ' / ' ELSE '' END ||\n" +
@@ -215,7 +215,7 @@ public class EventoEnsalamentoRepository {
                     ent.setNome(row[2] != null ? row[2].toString() : "");
                     ent.setCargo(row[0] != null ? row[0].toString() : "");
                     ent.setPeriodo("");
-                    ent.setId_local(0L);
+                    ent.setId_local(row[8] != null ? Long.parseLong(row[8].toString()) : 0L);
                     ent.setEscola(row[5] != null ? row[5].toString() : "");
                     ent.setCidade(row[4] != null ? row[4].toString() : "");
 
