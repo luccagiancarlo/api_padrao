@@ -319,7 +319,7 @@ public class EventoEnsalamentoRepository {
             qConcurso = entityManager.createNativeQuery(vsql);
             String concurso = (String) qConcurso.getSingleResult();
 
-            vsql = "SELECT distinct cidade, local FROM (\n" +
+            vsql = "SELECT distinct cidade, local, id FROM (\n" +
                     "SELECT c.nome,\n" +
                     "c.cpf,\n" +
                     "  CASE WHEN c.dados_inscricao [1] = '"+concurso+"'\n" +
@@ -342,6 +342,7 @@ public class EventoEnsalamentoRepository {
                     "\n" +
                     "  cd.cidade,\n" +
                     "  l.nome AS local,\n" +
+                    "  l.id AS id,\n" +
                     "  s.sala,\n" +
                     "  to_char(d.data_hora, 'dd/MM/yyyy HH24:mi') AS data_formatada\n" +
                     "FROM convocacao_negros_candidato c\n" +
@@ -361,7 +362,7 @@ public class EventoEnsalamentoRepository {
             for (Object[] row : resultList) {
 
                 EventoEnsalamentoLocal ent = new EventoEnsalamentoLocal();
-                ent.setId_local(i);
+                ent.setId_local(row[2] != null ? Long.parseLong(row[2].toString()) : i);
                 ent.setCidade(row[0] != null ? row[0].toString() : "");
                 ent.setEscola(row[1] != null ? row[1].toString() : "");
                 ent.setEdital(concurso);
