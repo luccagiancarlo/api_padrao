@@ -197,9 +197,9 @@ public class EventoEnsalamentoRepository {
                     "  INNER JOIN convocacao_negros_sala s ON s.id = sd.id_sala\n" +
                     "  INNER JOIN convocacao_negros_local l ON l.id = s.id_local\n" +
                     "  INNER JOIN convocacao_negros_cidade cd ON cd.id = l.id_cidade\n" +
-                    "WHERE c.id_convocacao = "+id_evento+" AND l.id="+idLocal+
+                    " WHERE c.id_convocacao = "+id_evento+" AND l.id="+idLocal+
                     //" AND c.dados_inscricao @> ARRAY ['"+prefixo+"'] :: VARCHAR []\n" +
-                    "ORDER BY cd.cidade, l.nome, c.sexo DESC, c.nome) as foo";
+                    " ORDER BY cd.cidade, l.nome, c.sexo DESC, c.nome) as foo";
 
 
             Query q2 = entityManager.createNativeQuery(vsql);
