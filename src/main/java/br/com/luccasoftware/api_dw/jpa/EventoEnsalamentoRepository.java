@@ -166,65 +166,78 @@ public class EventoEnsalamentoRepository {
 
         if (can.size() == 0) {
 
-            String vsql = "SELECT substring(cargos,1,length(cargos)-2) as cargos, substring(inscricoes,1,length(inscricoes)-2) as inscricoes, nome,cpf, cidade, local, sala, data_formatada, id FROM (\n" +
-                    "SELECT c.nome, l.id, \n" +
-                    "c.cpf,\n" +
-                    "  CASE WHEN c.dados_inscricao [1] = '"+prefixo+"'\n" +
-                    "    THEN c.dados_inscricao [3] || ' / ' ELSE '' END ||\n" +
-                    "  CASE WHEN c.dados_inscricao [4] = '"+prefixo+"'\n" +
-                    "    THEN c.dados_inscricao [6] || ' / ' ELSE '' END ||\n" +
-                    "  CASE WHEN c.dados_inscricao [7] =  '"+prefixo+"'\n" +
-                    "    THEN c.dados_inscricao [9] || ' / ' ELSE '' END ||\n" +
-                    "  CASE WHEN c.dados_inscricao [10] =  '"+prefixo+"'\n" +
-                    "    THEN c.dados_inscricao [12] || ' / ' ELSE '' END AS cargos,\n" +
-                    "\n" +
-                    "  CASE WHEN c.dados_inscricao [1] =  '"+prefixo+"'\n" +
-                    "    THEN c.dados_inscricao [2] || ' / ' ELSE '' END ||\n" +
-                    "  CASE WHEN c.dados_inscricao [4] =  '"+prefixo+"'\n" +
-                    "    THEN c.dados_inscricao [5] || ' / ' ELSE '' END ||\n" +
-                    "  CASE WHEN c.dados_inscricao [7] =  '"+prefixo+"'\n" +
-                    "    THEN c.dados_inscricao [8] || ' / ' ELSE '' END ||\n" +
-                    "  CASE WHEN c.dados_inscricao [10] =  '"+prefixo+"'\n" +
-                    "    THEN c.dados_inscricao [11] || ' / ' ELSE '' END AS inscricoes,\n" +
-                    "\n" +
-                    "  cd.cidade,\n" +
-                    "  l.nome AS local,\n" +
-                    "  s.sala,\n" +
-                    "  to_char(d.data_hora, 'dd/MM/yyyy HH24:mi') AS data_formatada\n" +
-                    "FROM convocacao_negros_candidato c\n" +
-                    "  INNER JOIN convocacao_negros_sala_data sd ON sd.id = c.id_sala_horario\n" +
-                    "  INNER JOIN convocacao_negros_data d ON d.id = sd.id_data\n" +
-                    "  INNER JOIN convocacao_negros_sala s ON s.id = sd.id_sala\n" +
-                    "  INNER JOIN convocacao_negros_local l ON l.id = s.id_local\n" +
-                    "  INNER JOIN convocacao_negros_cidade cd ON cd.id = l.id_cidade\n" +
-                    " WHERE c.id_convocacao = "+id_evento+" AND l.id="+idLocal+
-                    //" AND c.dados_inscricao @> ARRAY ['"+prefixo+"'] :: VARCHAR []\n" +
-                    " ORDER BY cd.cidade, l.nome, c.sexo DESC, c.nome) as foo";
+            String vsql = "SELECT DISTINCT (dados_inscricao[1]) AS primeiro_valor\n" +
+                    "FROM convocacao_negros_candidato \n" +
+                    "WHERE id_convocacao =" + id_evento;
+            Query qConcurso = entityManager.createNativeQuery(vsql);
+
+            List<Object> l = qConcurso.getResultList();
+
+            for (Object o : l) {
+                prefixo = o.toString();
+
+                vsql = "SELECT substring(cargos,1,length(cargos)-2) as cargos, substring(inscricoes,1,length(inscricoes)-2) as inscricoes, nome,cpf, cidade, local, sala, data_formatada, id FROM (\n" +
+                        "SELECT c.nome, l.id, \n" +
+                        "c.cpf,\n" +
+                        "  CASE WHEN c.dados_inscricao [1] = '" + prefixo + "'\n" +
+                        "    THEN c.dados_inscricao [3] || ' / ' ELSE '' END ||\n" +
+                        "  CASE WHEN c.dados_inscricao [4] = '" + prefixo + "'\n" +
+                        "    THEN c.dados_inscricao [6] || ' / ' ELSE '' END ||\n" +
+                        "  CASE WHEN c.dados_inscricao [7] =  '" + prefixo + "'\n" +
+                        "    THEN c.dados_inscricao [9] || ' / ' ELSE '' END ||\n" +
+                        "  CASE WHEN c.dados_inscricao [10] =  '" + prefixo + "'\n" +
+                        "    THEN c.dados_inscricao [12] || ' / ' ELSE '' END AS cargos,\n" +
+                        "\n" +
+                        "  CASE WHEN c.dados_inscricao [1] =  '" + prefixo + "'\n" +
+                        "    THEN c.dados_inscricao [2] || ' / ' ELSE '' END ||\n" +
+                        "  CASE WHEN c.dados_inscricao [4] =  '" + prefixo + "'\n" +
+                        "    THEN c.dados_inscricao [5] || ' / ' ELSE '' END ||\n" +
+                        "  CASE WHEN c.dados_inscricao [7] =  '" + prefixo + "'\n" +
+                        "    THEN c.dados_inscricao [8] || ' / ' ELSE '' END ||\n" +
+                        "  CASE WHEN c.dados_inscricao [10] =  '" + prefixo + "'\n" +
+                        "    THEN c.dados_inscricao [11] || ' / ' ELSE '' END AS inscricoes,\n" +
+                        "\n" +
+                        "  cd.cidade,\n" +
+                        "  l.nome AS local,\n" +
+                        "  s.sala,\n" +
+                        "  to_char(d.data_hora, 'dd/MM/yyyy HH24:mi') AS data_formatada\n" +
+                        "FROM convocacao_negros_candidato c\n" +
+                        "  INNER JOIN convocacao_negros_sala_data sd ON sd.id = c.id_sala_horario\n" +
+                        "  INNER JOIN convocacao_negros_data d ON d.id = sd.id_data\n" +
+                        "  INNER JOIN convocacao_negros_sala s ON s.id = sd.id_sala\n" +
+                        "  INNER JOIN convocacao_negros_local l ON l.id = s.id_local\n" +
+                        "  INNER JOIN convocacao_negros_cidade cd ON cd.id = l.id_cidade\n" +
+                        " WHERE c.id_convocacao = " + id_evento + " AND l.id=" + idLocal +
+                        " AND c.dados_inscricao @> ARRAY ['" + prefixo + "'] :: VARCHAR []\n" +
+                        " ORDER BY cd.cidade, l.nome, c.sexo DESC, c.nome) as foo";
 
 
-            Query q2 = entityManager.createNativeQuery(vsql);
-            List<Object[]> r = q2.getResultList();
-            if (r.size() > 0) {
-                for (Object[] row : r) {
-                    EventoEnsalamentoCandidato ent = new EventoEnsalamentoCandidato();
+                Query q2 = entityManager.createNativeQuery(vsql);
+                List<Object[]> r = q2.getResultList();
+                if (r.size() > 0) {
+                    for (Object[] row : r) {
+                        EventoEnsalamentoCandidato ent = new EventoEnsalamentoCandidato();
 
-                    ent.setId_evento(id_evento);
-                    ent.setDescricao("Convocacao Geral " + id_evento);
-                    ent.setInscricao(row[3] != null ? row[3].toString() : "");
-                    ent.setId_cargo(0L);
-                    ent.setNumero(0L);
-                    ent.setCpf(row[3] != null ? row[3].toString() : "");
-                    ent.setNome(row[2] != null ? row[2].toString() : "");
-                    ent.setCargo(row[0] != null ? row[0].toString() : "");
-                    ent.setPeriodo("");
-                    ent.setId_local(row[8] != null ? Long.parseLong(row[8].toString()) : 0L);
-                    ent.setEscola(row[5] != null ? row[5].toString() : "");
-                    ent.setCidade(row[4] != null ? row[4].toString() : "");
+                        ent.setId_evento(id_evento);
+                        ent.setDescricao("Convocacao Geral " + id_evento);
+                        ent.setInscricao(row[3] != null ? row[3].toString() : "");
+                        ent.setId_cargo(0L);
+                        ent.setNumero(0L);
+                        ent.setCpf(row[3] != null ? row[3].toString() : "");
+                        ent.setNome(row[2] != null ? row[2].toString() : "");
+                        ent.setCargo(row[0] != null ? row[0].toString() : "");
+                        ent.setPeriodo("");
+                        ent.setId_local(row[8] != null ? Long.parseLong(row[8].toString()) : 0L);
+                        ent.setEscola(row[5] != null ? row[5].toString() : "");
+                        ent.setCidade(row[4] != null ? row[4].toString() : "");
 
-                    can.add(ent);
+                        can.add(ent);
 
+                    }
                 }
             }
+
+
         }
 
         return can;
