@@ -18,6 +18,7 @@ public class Cargo {
     private Integer tt_ins_pcd;
     private Integer tt_ins_isentos;
     private Double taxa;
+    private String dt_aplicacao_po;
 
 
     public String getPrefixo() {
@@ -138,6 +139,14 @@ public class Cargo {
 
     public void setTaxa(Double taxa) {
         this.taxa = taxa;
+    }
+
+    public String getDt_aplicacao_po() {
+        return dt_aplicacao_po;
+    }
+
+    public void setDt_aplicacao_po(String dt_aplicacao_po) {
+        this.dt_aplicacao_po = dt_aplicacao_po;
     }
 
 

@@ -21,12 +21,12 @@ public class CargoRepository {
     private DatabaseUtils databaseUtils;
 
     public List<Cargo> findAllCargos(String prefixo) {
-        String sql = "SELECT a.id, a.numero, a.nome, a.sigla, a.cidade, a.vagas, a.vagaspne, a.vagas_afro, a.taxa " +
-                "FROM " + prefixo + "_cargo a ORDER BY a.id";
+        String sql = "SELECT a.id, a.numero, a.nome, a.sigla, a.cidade, a.vagas, a.vagaspne, a.vagas_afro, a.taxa, b.data " +
+                "FROM " + prefixo + "_cargo a left join "+prefixo+"_data_cargo b on (a.id_data = b.id)  ORDER BY a.id";
 
         if (!databaseUtils.existeColuna(prefixo + "_cargo", "vagas_afro")) {
-            sql = "SELECT a.id, a.numero, a.nome, a.sigla, a.cidade, a.vagas, a.vagaspne, 0 as vagas_afro, a.taxa " +
-                    "FROM " + prefixo + "_cargo a ORDER BY a.id";
+            sql = "SELECT a.id, a.numero, a.nome, a.sigla, a.cidade, a.vagas, a.vagaspne, 0 as vagas_afro, a.taxa, b.data " +
+                    "FROM " + prefixo + "_cargo a left join "+prefixo+"_data_cargo b on (a.id_data = b.id)  ORDER BY a.id";
         }
 
         Query query = entityManager.createNativeQuery(sql);
@@ -45,6 +45,7 @@ public class CargoRepository {
             cargo.setVagaspne(row[6] != null ? Integer.parseInt(row[6].toString()) : 0);
             cargo.setVagasAfro(row[7] != null ? Integer.parseInt(row[7].toString()) : 0);
             cargo.setTaxa(row[8] != null ? Double.parseDouble(row[8].toString()) : 0);
+            cargo.setDt_aplicacao_po(row[9] != null ? row[9].toString() : "");
 
             cargos.add(cargo);
         }
@@ -61,12 +62,12 @@ public class CargoRepository {
         for (Object prefixo : prefixos) {
             try {
                 String prefixoStr = prefixo.toString();
-                String sql = "SELECT a.id, a.numero, a.nome, a.sigla, a.cidade, a.vagas, a.vagaspne, a.vagas_afro, a.taxa " +
-                        "FROM " + prefixoStr + "_cargo a ORDER BY a.id";
+                String sql = "SELECT a.id, a.numero, a.nome, a.sigla, a.cidade, a.vagas, a.vagaspne, a.vagas_afro, a.taxa, b.data " +
+                        "FROM " + prefixoStr + "_cargo a left join "+prefixoStr+"_data_cargo b on (a.id_data = b.id)  ORDER BY a.id";
 
                 if (!databaseUtils.existeColuna(prefixoStr + "_cargo", "vagas_afro")) {
-                    sql = "SELECT a.id, a.numero, a.nome, a.sigla, a.cidade, a.vagas, a.vagaspne, 0 as vagas_afro, a.taxa " +
-                            "FROM " + prefixoStr + "_cargo a ORDER BY a.id";
+                    sql = "SELECT a.id, a.numero, a.nome, a.sigla, a.cidade, a.vagas, a.vagaspne, 0 as vagas_afro, a.taxa, b.data " +
+                            "FROM " + prefixoStr + "_cargo a left join "+prefixoStr+"_data_cargo b on (a.id_data = b.id)  ORDER BY a.id";
                 }
 
                 Query query = entityManager.createNativeQuery(sql);
@@ -84,6 +85,7 @@ public class CargoRepository {
                     cargo.setVagaspne(row[6] != null ? Integer.parseInt(row[6].toString()) : 0);
                     cargo.setVagasAfro(row[7] != null ? Integer.parseInt(row[7].toString()) : 0);
                     cargo.setTaxa(row[8] != null ? Double.parseDouble(row[8].toString()) : 0);
+                    cargo.setDt_aplicacao_po(row[9] != null ? row[9].toString() : "");
 
                     int tt_ins = qde_inscritos(prefixoStr, row[0].toString());
                     int tt_ins_homol = qde_inscritos_homol(prefixoStr, row[0].toString());
