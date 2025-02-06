@@ -87,7 +87,7 @@ public class CargoRepository {
                     cargo.setVagasAfro(row[7] != null ? Integer.parseInt(row[7].toString()) : 0);
                     cargo.setTaxa(row[8] != null ? Double.parseDouble(row[8].toString()) : 0);
                     cargo.setDt_aplicacao_po(row[9] != null ? row[9].toString() : "");
-                    cargo.setId_concurso(id);
+                    cargo.setCd_concurso(id);
 
                     int tt_ins = qde_inscritos(prefixoStr, row[0].toString());
                     int tt_ins_homol = qde_inscritos_homol(prefixoStr, row[0].toString());

@@ -19,7 +19,7 @@ public class Cargo {
     private Integer tt_ins_isentos;
     private Double taxa;
     private String dt_aplicacao_po;
-    private String id_concurso;
+    private String cd_concurso;
 
 
     public String getPrefixo() {
@@ -150,12 +150,12 @@ public class Cargo {
         this.dt_aplicacao_po = dt_aplicacao_po;
     }
 
-    public String getId_concurso() {
-        return id_concurso;
+    public String getCd_concurso() {
+        return cd_concurso;
     }
 
-    public void setId_concurso(String id_concurso) {
-        this.id_concurso = id_concurso;
+    public void setCd_concurso(String cd_concurso) {
+        this.cd_concurso = cd_concurso;
     }
 
 
