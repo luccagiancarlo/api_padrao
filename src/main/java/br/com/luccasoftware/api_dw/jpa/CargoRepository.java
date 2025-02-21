@@ -1,6 +1,7 @@
 package br.com.luccasoftware.api_dw.jpa;
 
 import br.com.luccasoftware.api_dw.dto.Cargo;
+import br.com.luccasoftware.api_dw.dto.QdeTitulos;
 import br.com.luccasoftware.api_dw.utils.DatabaseUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -111,6 +112,48 @@ public class CargoRepository {
         }
 
         return cargos;
+    }
+
+    public List<QdeTitulos> findAllTitulos(int inicio, int fim) {
+        List<QdeTitulos> titulos = new ArrayList<>();
+        String sqlConcursos = "SELECT a.id, a.nome FROM concurso a where EXTRACT(YEAR FROM a.\"dataInicioInscricao\") between " + inicio + " and " + fim + "   ORDER BY a.id";
+        Query queryConcursos = entityManager.createNativeQuery(sqlConcursos);
+        List<Object[]> prefixos = queryConcursos.getResultList();
+
+        for (Object[] prefixo : prefixos) {
+            try {
+                String id = prefixo[0].toString();
+                String prefixoStr = prefixo[1].toString();
+
+                long qde = qde_titulos(prefixoStr);
+                QdeTitulos titulo = new QdeTitulos();
+                titulo.setId(Long.parseLong(id));
+                titulo.setPrefixo(prefixoStr);
+                titulo.setQde(qde);
+
+                titulos.add(titulo);
+
+
+            } catch (Exception e) {
+                System.out.println("Erro: " + e.getMessage());
+            }
+        }
+        return titulos;
+    }
+
+    private int qde_titulos(String prefixoStr) {
+        int r = 0;
+        String vsql = "select count(numero) from " + prefixoStr + "_items_titulos WHERE copia = 'NAO' and corrigido";
+        Query query = entityManager.createNativeQuery(vsql);
+        List<Object> q = query.getResultList();
+        for (Object o : q) {
+            try {
+                r = Integer.parseInt(o.toString());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return r;
     }
 
     private int qde_inscritos (String prefixo, String id_cargo) {

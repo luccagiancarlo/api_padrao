@@ -1,6 +1,7 @@
 package br.com.luccasoftware.api_dw.controller;
 
 import br.com.luccasoftware.api_dw.dto.Cargo;
+import br.com.luccasoftware.api_dw.dto.QdeTitulos;
 import br.com.luccasoftware.api_dw.jpa.CargoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -45,6 +46,34 @@ public class CargoController {
             }
         }
         return cargos;
+    }
+
+    @GetMapping("/retornarTitulos/{prefixo}")
+    public List<QdeTitulos> retornarTitulos(
+            @RequestHeader(value = "Authorization") String authorizationHeader,
+            @PathVariable String prefixo,
+            @RequestParam(defaultValue = "0") int inicio,
+            @RequestParam(defaultValue = "0") int fim) {
+
+        // Valida se o Authorization header está presente e começa com "Bearer "
+        if (!authorizationHeader.startsWith("Bearer ")) {
+            throw new RuntimeException("Token inválido.");
+        }
+
+        // O filtro JWT deve garantir que a solicitação está autenticada
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new RuntimeException("Usuário não autenticado.");
+        }
+
+        // Retorna a lista de titulos com o prefixo especificado
+        List<QdeTitulos> titulos = new ArrayList<>();
+        if (prefixo != null) {
+
+                titulos = cargoRepository.findAllTitulos(inicio, fim);
+
+        }
+        return titulos;
     }
 
 
