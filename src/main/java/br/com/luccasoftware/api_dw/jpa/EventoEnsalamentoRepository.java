@@ -218,18 +218,33 @@ public class EventoEnsalamentoRepository {
                     for (Object[] row : r) {
                         EventoEnsalamentoCandidato ent = new EventoEnsalamentoCandidato();
 
-                        ent.setId_evento(id_evento);
-                        ent.setDescricao("Convocacao Geral " + id_evento);
-                        ent.setInscricao(row[3] != null ? row[3].toString() : "");
-                        ent.setId_cargo(0L);
-                        ent.setNumero(0L);
-                        ent.setCpf(row[3] != null ? row[3].toString() : "");
-                        ent.setNome(row[2] != null ? row[2].toString() : "");
-                        ent.setCargo(row[0] != null ? row[0].toString() : "");
-                        ent.setPeriodo("");
-                        ent.setId_local(row[8] != null ? Long.parseLong(row[8].toString()) : 0L);
-                        ent.setEscola(row[5] != null ? row[5].toString() : "");
-                        ent.setCidade(row[4] != null ? row[4].toString() : "");
+                        try {
+                            ent.setId_evento(id_evento);
+                            ent.setDescricao("Convocacao Geral " + id_evento);
+                            ent.setInscricao(row[3] != null ? row[3].toString() : "");
+                            ent.setId_cargo(0L);
+                            ent.setNumero(0L);
+                            ent.setCpf(row[3] != null ? row[3].toString() : "");
+                            ent.setNome(row[2] != null ? row[2].toString() : "");
+                            ent.setCargo(row[0] != null ? row[0].toString() : "");
+                            ent.setPeriodo("");
+                            ent.setId_local(row[8] != null ? Long.parseLong(row[8].toString()) : 0L);
+                            ent.setEscola(row[5] != null ? row[5].toString() : "");
+                            ent.setCidade(row[4] != null ? row[4].toString() : "");
+                        } catch (Exception e) {
+                            ent.setId_evento(id_evento);
+                            ent.setDescricao("Convocacao Geral " + id_evento);
+                            ent.setInscricao("");
+                            ent.setId_cargo(0L);
+                            ent.setNumero(0L);
+                            ent.setCpf("");
+                            ent.setNome("");
+                            ent.setCargo("");
+                            ent.setPeriodo("");
+                            ent.setId_local(0L);
+                            ent.setEscola(e.getMessage());
+                            ent.setCidade("");
+                        }
 
                         can.add(ent);
 
