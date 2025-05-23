@@ -40,6 +40,7 @@ public class SecurityConfig {
                         .requestMatchers("/api_dw/v1/autenticar_app").permitAll()
                         .requestMatchers("/api_dw/v1/autenticar_dw").permitAll()
                         .requestMatchers("/api_dw/v1/presigned-url").permitAll()
+                        .requestMatchers("/api_dw/v1/presigned-url-download").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
