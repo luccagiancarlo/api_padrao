@@ -144,18 +144,34 @@ public class EventoEnsalamentoRepository {
                 for (Object[] row : resultList) {
                     EventoEnsalamentoCandidato ent = new EventoEnsalamentoCandidato();
 
-                    ent.setId_evento(row[0] != null ? Long.parseLong(row[0].toString()) : 0L);
-                    ent.setDescricao(row[1] != null ? row[1].toString() : "");
-                    ent.setInscricao(row[2] != null ? row[2].toString() : "");
-                    ent.setId_cargo(row[3] != null ? Long.parseLong(row[3].toString()) : 0L);
-                    ent.setNumero(row[4] != null ? Long.parseLong(row[4].toString()) : 0L);
-                    ent.setCpf(row[5] != null ? row[5].toString() : "");
-                    ent.setNome(row[6] != null ? row[6].toString() : "");
-                    ent.setCargo(row[7] != null ? row[7].toString() : "");
-                    ent.setPeriodo(row[8] != null ? row[8].toString() : "");
-                    ent.setId_local(row[9] != null ? Long.parseLong(row[9].toString()) : 0L);
-                    ent.setEscola(row[10] != null ? row[10].toString() : "");
-                    ent.setCidade(row[11] != null ? row[11].toString() : "");
+                    try {
+
+                        ent.setId_evento(row[0] != null ? Long.parseLong(row[0].toString()) : 0L);
+                        ent.setDescricao(row[1] != null ? row[1].toString() : "");
+                        ent.setInscricao(row[2] != null ? row[2].toString() : "");
+                        ent.setId_cargo(row[3] != null ? Long.parseLong(row[3].toString()) : 0L);
+                        ent.setNumero(row[4] != null ? Long.parseLong(row[4].toString()) : 0L);
+                        ent.setCpf(row[5] != null ? row[5].toString() : "");
+                        ent.setNome(row[6] != null ? row[6].toString() : "");
+                        ent.setCargo(row[7] != null ? row[7].toString() : "");
+                        ent.setPeriodo(row[8] != null ? row[8].toString() : "");
+                        ent.setId_local(row[9] != null ? Long.parseLong(row[9].toString()) : 0L);
+                        ent.setEscola(row[10] != null ? row[10].toString() : "");
+                        ent.setCidade(row[11] != null ? row[11].toString() : "");
+                    } catch (Exception e) {
+                        ent.setId_evento(id_evento);
+                        ent.setDescricao("Convocacao Geral " + id_evento);
+                        ent.setInscricao("");
+                        ent.setId_cargo(0L);
+                        ent.setNumero(0L);
+                        ent.setCpf("");
+                        ent.setNome("");
+                        ent.setCargo("");
+                        ent.setPeriodo("");
+                        ent.setId_local(0L);
+                        ent.setEscola(e.getMessage());
+                        ent.setCidade(vsql);
+                    }
 
                     can.add(ent);
 
@@ -243,7 +259,7 @@ public class EventoEnsalamentoRepository {
                             ent.setPeriodo("");
                             ent.setId_local(0L);
                             ent.setEscola(e.getMessage());
-                            ent.setCidade("");
+                            ent.setCidade(vsql);
                         }
 
                         can.add(ent);
