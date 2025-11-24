@@ -8,11 +8,11 @@
         <version>3.3.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>br.com.luccasoftware</groupId>
-    <artifactId>api_dw</artifactId>
+    <groupId>br.uem.vestibular</groupId>
+    <artifactId>api_padrao</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>api_dw</name>
-    <description>api_dw</description>
+    <name>api_padrao</name>
+    <description>API Padrão UEM Vestibular</description>
     <url/>
     <licenses>
         <license/>
@@ -28,6 +28,7 @@
     </scm>
     <properties>
         <java.version>21</java.version>
+        <start-class>br.uem.vestibular.api_padrao.ApiDwApplication</start-class>
     </properties>
     <dependencies>
         <dependency>
@@ -45,11 +46,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
-        </dependency>
-        <!-- Spring Boot Starter Web -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
         <!-- Spring Boot Starter Security -->
@@ -117,9 +113,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>42.2.19</version> <!-- Certifique-se de usar uma versão recente -->
+            <groupId>com.ibm.db2</groupId>
+            <artifactId>jcc</artifactId>
+            <version>11.5.8.0</version>
         </dependency>
 
     </dependencies>
@@ -129,6 +125,9 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>br.uem.vestibular.api_padrao.ApiDwApplication</mainClass>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
